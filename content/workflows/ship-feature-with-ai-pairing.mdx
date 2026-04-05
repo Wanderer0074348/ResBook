@@ -1,37 +1,127 @@
 ---
 title: Ship a Feature with AI Pairing
 slug: ship-feature-with-ai-pairing
-description: Use AI pairing across planning, implementation, and verification to ship a scoped feature faster.
-author: ResBook Team
+description: Pair with Claude Code, Cursor, and Copilot to move from vague feature request to merge-ready PR without losing context or shipping untested code.
+author: Manav Arya Singh
 complexity: Intermediate
 toolsUsed: [cursor, github-copilot, claude-code]
 dateAdded: 2026-04-05
 ---
 
-## Goal
+## Why Pair with AI
 
-Ship a user-facing feature from idea to merge while maintaining review quality.
+A vague feature request ("add user filters") can be interpreted 10 different ways. AI pairing helps you get concrete early: what exactly are you building, what can break, what should be tested, and what edge cases matter. Then it accelerates implementation without losing that clarity.
 
-<WorkflowStep step={1} title="Define Scope and Acceptance Criteria">
-Use Claude Code to convert a feature request into a concrete implementation checklist with edge cases.
+This workflow is faster than solo work because you define scope once, tests are planned upfront, and implementation errors get caught before merge instead of in the PR review.
+
+## The Flow
+
+<WorkflowGraph
+  height={300}
+  nodes={[
+    { id: "1", data: { label: "📝 Translate\nRequest → Spec" }, position: { x: 50, y: 100 }, style: { background: "#e0e7ff", border: "2px solid #000" } },
+    { id: "2", data: { label: "💻 Implement\nWith IDE" }, position: { x: 280, y: 100 }, style: { background: "#dbeafe", border: "2px solid #000" } },
+    { id: "3", data: { label: "🔍 Harden\nTest & Review" }, position: { x: 510, y: 100 }, style: { background: "#fecaca", border: "2px solid #000" } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e2-3", source: "2", target: "3" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Translate Request into Spec">
+
+Vague feature requests are the enemy. "Add user filters" means one thing to you and something completely different to your PM. The request is probably missing half the context you need to actually build it.
+
+Spend 30 minutes with <ToolLink slug="claude-code" /> to get concrete. Paste the request:
 
 <PromptBlock agent="USER">
-Break this feature into implementation tasks with acceptance criteria and likely failure cases. Keep tasks independently testable.
+I got this feature request: [request]
+
+Help me turn this into a concrete spec:
+1. Who exactly uses this? What's their workflow?
+2. Acceptance criteria: 3-4 specific things that must be done when this is complete
+3. Edge cases: What could break? (no data, wrong input, permissions, scale)
+4. What am I NOT building? What should we defer?
+5. Database/API changes: Do I need migrations, new endpoints, schema changes?
+
+Be specific. I'll use this as my test plan.
 </PromptBlock>
+
+Claude will ask clarifying questions and challenge your assumptions. You'll end up with something concrete:
+
+- User can filter issues by status (Open, Closed, Archived)
+- Default view shows only Open issues
+- Filters persist in the URL so users can share filtered views
+- Mobile version uses a dropdown instead of checkboxes
+- Tests must cover: empty state, single item, 100+ items
+- Permission check: users only see their own issues
+
+That's your spec. That's your test plan. No surprises on Friday when the PM says "but I thought it would do X."
 </WorkflowStep>
 
 <WorkflowStep step={2} title="Implement with IDE Pairing">
-Use Cursor and Copilot for component scaffolding, refactors, and repetitive test setup.
-</WorkflowStep>
 
-<WorkflowStep step={3} title="Hardening Pass">
-Run lint/build/tests and ask Claude Code for a final risk review focusing on regressions and missing tests.
+Open <ToolLink slug="cursor" /> and start building. You have a spec, so you know exactly what to do. Use both tools at once:
+
+<ToolLink slug="github-copilot" /> is your fast hands. It scaffolds components, writes boilerplate, generates test stubs. Let it do repetitive work. <ToolLink slug="claude-code" /> is your architect. When you hit tricky logic, complex state management, or you need to refactor something, bring Claude in.
+
+Start by creating the component skeleton. Let Copilot fill it. Build the happy path first—user filters, data displays correctly. Then add the edge cases from your spec: no data, loading states, error states. Write tests as you build, not after. Tests catch bugs immediately instead of Friday afternoon.
+
+Every 1-2 hours, check your progress with Claude Code:
 
 <PromptBlock agent="USER">
-Review current diff for functional regressions, edge cases, and missing tests. Prioritize findings by severity.
+I'm building [feature] based on this spec: [spec from step 1]
+
+Here's my implementation so far: [code]
+
+Review:
+1. Does it match the spec? Missing anything?
+2. Obvious bugs or edge cases I'm not handling?
+3. Tests I should add?
+
+I'll iterate on your feedback.
 </PromptBlock>
+
+Claude will spot things you missed: "You're not handling the case where the filter returns no results," or "This API call will block rendering for large datasets."
+
+**Decision Point**: Is your code clean and testable, or does it feel fragile? If it feels fragile, refactor now using Claude Code. Don't drag broken code into Thursday. If it's solid, move to hardening.
+
+This takes 2-4 hours depending on complexity.
 </WorkflowStep>
 
-## Expected Output
+<WorkflowStep step={3} title="Hardening: Tests and Risk Review">
 
-A merge-ready PR with clear acceptance coverage, validated checks, and lower review back-and-forth.
+Your feature is code-complete. Now prove it won't break anything. Run through your acceptance criteria from step 1. Did you build all of it? Are the edge cases tested? No console errors? Linter happy? Type checker happy? Existing tests still pass?
+
+Then get Claude Code to do a final risk review on your complete diff:
+
+<PromptBlock agent="USER">
+I'm shipping this. Here's my complete diff: [diff]
+
+Risk review:
+1. Could this break existing features? (Check which tests I modified)
+2. What's the scariest line in this diff?
+3. Did I miss testing any edge cases from the original spec?
+4. Any security, performance, or accessibility red flags?
+5. Is this code maintainable?
+
+Prioritize by severity. I'll fix critical issues today.
+</PromptBlock>
+
+Claude usually finds 1-3 real issues. Missing test, edge case you didn't think of, a potential bug. Fix those before merge. The rest are nice-to-haves.
+
+Once you get a green light, commit. Write a clear PR description that references your acceptance criteria. That way the reviewer knows exactly what you built and can verify it against the spec.
+
+This takes 1-2 hours including fixes.
+</WorkflowStep>
+
+## What You'll Ship
+
+A feature that:
+- Solves the exact problem the request asked for (no scope creep)
+- Has edge cases tested, not discovered in production
+- Won't surprise you with regressions
+- Is documented well enough that someone else can understand it
+
+The key is getting the spec right in step 1. Implementation is just execution.

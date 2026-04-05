@@ -64,9 +64,9 @@ export function TableOfContents() {
   }
 
   return (
-    <div className="hidden xl:block fixed right-8 top-32 w-48">
-      <div className="text-xs font-bold mb-4 uppercase tracking-wide">On this page</div>
-      <nav className="space-y-2 text-sm">
+    <div className="hidden xl:block fixed right-12 top-32 w-56 mr-4 border border-gray-300 dark:border-gray-700 p-4">
+      <div className="text-sm font-bold mb-6 uppercase tracking-wide">On this page</div>
+      <nav className="space-y-3 text-base">
         {headings.map((heading) => (
           <Link
             key={heading.id}

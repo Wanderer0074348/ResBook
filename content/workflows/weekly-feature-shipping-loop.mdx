@@ -1,39 +1,129 @@
 ---
 title: Weekly Feature Shipping Loop
 slug: weekly-feature-shipping-loop
-description: Repeatable weekly cycle to scope, build, test, and release one meaningful feature.
+description: A repeatable rhythm for shipping one meaningful feature per week without losing sleep over regressions or quality.
 author: Manav Arya Singh
 complexity: Intermediate
 toolsUsed: [claude-code, cursor, github-copilot, warp]
 dateAdded: 2026-04-05
 ---
 
-## Goal
-Ship one high-impact feature every week with predictable quality.
+## Why This Works
 
-<WorkflowStep step={1} title="Monday: Scope and Acceptance Criteria">
-Define the feature boundary, edge cases, and success criteria.
+The goal is predictability, not speed. By running the same loop every week, your team gets better at estimating, QA catches patterns faster, and you avoid the chaos of "big bang" releases. One feature per week is aggressive but doable if you scope ruthlessly.
 
-<PromptBlock agent="planner">
-Create a 5-day implementation plan with explicit acceptance criteria and test checkpoints.
+## The Rhythm
+
+<WorkflowGraph
+  height={300}
+  nodes={[
+    { id: "1", data: { label: "📋 Monday\nScope" }, position: { x: 50, y: 100 }, style: { background: "#fef3c7", border: "2px solid #000" } },
+    { id: "2", data: { label: "🔨 Tue-Wed\nBuild Slices" }, position: { x: 250, y: 100 }, style: { background: "#dbeafe", border: "2px solid #000" } },
+    { id: "3", data: { label: "🛡️ Thursday\nHarden" }, position: { x: 450, y: 100 }, style: { background: "#fecaca", border: "2px solid #000" } },
+    { id: "4", data: { label: "🚀 Friday\nShip & Monitor" }, position: { x: 650, y: 100 }, style: { background: "#bbf7d0", border: "2px solid #000" } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e2-3", source: "2", target: "3" },
+    { id: "e3-4", source: "3", target: "4" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Monday: Scope the Feature">
+
+Monday sets the tone for the week. You have 4 days of engineering time. Period. So either you scope ruthlessly, or you'll ship a half-finished feature on Friday and regret it.
+
+Write down what you're building in one sentence. "User can export reports as PDF." That's it. Clear. Testable. Not "improve reporting" or "make exports better."
+
+Then list what's NOT in scope. This is as important as what is. "We're not building scheduled exports, email delivery, or advanced formatting. That's next month." By saying no loudly, you prevent scope creep during the week.
+
+Pick 3-4 edge cases that actually matter. "What if the report is 500+ pages?" (probably slow or crashes). "What if the user has no email set up?" (probably breaks the export). "What if they hit export while already exporting?" (race condition). These are the things that'll bite you in production if you ignore them.
+
+Finally, pick one success metric for Friday. Not "ship the feature"—that's a given. Something you'll actually measure. "5+ users have exported, 0 errors in logs" is good. It's concrete and tells you if it worked.
+
+Now validate this with Claude Code. Let Claude poke holes:
+
+<PromptBlock agent="USER">
+Here's my feature spec: [one sentence what]
+
+Out of scope: [what we're NOT building]
+
+Edge cases we care about: [3-4 cases]
+
+Success metric Friday: [one metric]
+
+I have 3-4 days. Is this realistic? What edge cases am I missing? What could break in production?
 </PromptBlock>
+
+Spend 1-2 hours here. Scope clarity is the biggest thing separating "shipped Friday on time" from "half-shipped and broken."
 </WorkflowStep>
 
-<WorkflowStep step={2} title="Tuesday-Wednesday: Implement in Slices">
-Use <ToolLink slug="claude-code" /> and <ToolLink slug="github-copilot" /> for slice-by-slice implementation.
+<WorkflowStep step={2} title="Tuesday-Wednesday: Build in Slices">
+
+Two days to build. That's tight, but it's doable if you break the work into slices that don't depend on each other.
+
+Take your feature and split it into 2-3 independent pieces. "User can export reports as PDF" becomes: Slice 1 is the button and basic PDF generation. Slice 2 is formatting and logos. Slice 3 is performance and error handling. Each slice should be testable on its own.
+
+Tuesday, build Slice 1. Get it to staging. Test it yourself and with one user if you can. Does the button work? Does the PDF actually generate? Is it readable? If the answer is mostly yes, great. Move forward.
+
+Wednesday is Slice 2. Build it locally. If it's feeling good and doesn't break Slice 1, merge to main Wednesday evening. If it's fragile or tangled with Slice 1, keep it local and fold both into Thursday's hardening pass.
+
+Use <ToolLink slug="cursor" /> and <ToolLink slug="github-copilot" /> for scaffolding and repetitive code. Reach for <ToolLink slug="claude-code" /> when you hit tricky logic or need to refactor something.
+
+**Decision Point**: Can you test Slice 1 without Slice 2? If yes, you're good. If your slices are tangled (changes to Slice 1 break Slice 2, or vice versa), stop and refactor now. Don't drag broken code into Thursday.
 </WorkflowStep>
 
-<WorkflowStep step={3} title="Thursday: Harden and Test">
-Run full checks and fix regressions.
+<WorkflowStep step={3} title="Thursday: Harden and Lock Down">
 
-<PromptBlock agent="reviewer">
-Review this diff for regressions, missing tests, and edge-case failures. Output findings by severity.
+Thursday is your last line of defense. Your feature is built, but it hasn't faced any real users yet. This is where you stress-test it and plug the leaks.
+
+Merge all slices to main. Deploy to staging. Then run through the full flow—not once, but like you're a skeptical user trying to break it. Use the edge cases from Monday's spec. If Monday said "what if the report is 500+ pages," actually test that. Load the real data. See if it's slow. See if it crashes.
+
+Check for obvious things: no console errors, linting passes, tests pass. If you wrote tests as you built (which you should have), they're your safety net. If you didn't, write them now for the critical paths.
+
+Run your code through Claude Code for a final review. Let Claude spot what you're too close to see:
+
+<PromptBlock agent="USER">
+I'm shipping tomorrow. Here's my full diff: [diff]
+
+Final risk review:
+1. Do I have obvious bugs or logic errors?
+2. Which tests am I missing?
+3. Any performance red flags (slow queries, memory leaks, large bundles)?
+4. Security issues (auth checks, input validation, XSS)?
+5. Could this break existing features? (Check the tests I modified)
+
+Flag by severity. I'll fix anything critical today.
 </PromptBlock>
+
+Usually you'll find 2-5 issues. Most are quick fixes. If Claude spots something architectural, fix it now, not during the Friday post-mortem.
+
+This takes 2-3 hours including fixes. Spend the time. Friday is just the victory lap.
 </WorkflowStep>
 
-<WorkflowStep step={4} title="Friday: Release and Notes">
-Deploy, document the release, and collect user feedback signals for next week.
+<WorkflowStep step={4} title="Friday: Ship and Observe">
+
+Deploy early. Morning is ideal—gives you the whole day to monitor and fix if something goes sideways.
+
+Before you hit deploy, announce what's coming. A quick Slack message, a line in your changelog, maybe a short email to your power users. "Hey, starting today you can export reports as PDF." Don't oversell it. Just let people know it exists.
+
+Deploy. Refresh your monitoring dashboard. Watch errors, latency, database load. Not obsessively—just check every 15 minutes for the first hour, then every few hours after that. If something breaks, you own it. You have until EOD Friday to fix and re-deploy.
+
+Watch for support messages or Slack questions. You'll learn real patterns about how users actually use your feature, which is information you can't get from testing.
+
+By Friday evening, you know if it worked. Did your success metric hit? (5+ users exported, 0 errors in logs.) Did it break anything? Did users ask for something you didn't build?
+
+Close the loop with a quick retrospective: What went smoothly? What was slower than expected? What would you do different next week? Feed that into Monday's scope.
+
+Then ship it on social media. "We shipped PDF exports this week" is a great thing to be proud of.
 </WorkflowStep>
 
-## Expected Output
-A feature shipped with test coverage, release notes, and a feedback backlog for iteration.
+## What You'll Build
+
+Predictable feature delivery. By Friday, you'll have:
+- One complete feature in production
+- Data on whether it worked (signups, usage, errors)
+- A pattern that repeats every week
+- A growing list of "things that slow us down" that inform the next cycle
+
+The key is honoring scope. One high-quality feature is better than three half-baked ones.

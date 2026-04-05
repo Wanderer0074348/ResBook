@@ -83,7 +83,7 @@ export function HomeDotfilesBlock({ dotfiles }: HomeDotfilesBlockProps) {
                 <h3 className="mb-1 font-bold text-black dark:text-white">{dotfile.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{dotfile.description}</p>
                 <p className="mt-2 text-xs text-gray-600 dark:text-gray-500">
-                  by <span className="font-bold">{dotfile.author}</span> • added {new Date(dotfile.dateAdded).toLocaleDateString()}
+                  by <span className="font-bold">{dotfile.author}</span> • added {dotfile.dateAdded}
                 </p>
               </div>
               <span className="whitespace-nowrap border border-gray-300 px-2 py-1 text-xs dark:border-gray-700">

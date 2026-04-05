@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getDotfiles, getTools, getWorkflows } from "@/lib/mdx";
-import { HomeDotfilesBlock } from "@/components/listing/HomeDotfilesBlock";
+import { cn } from "@/lib/utils";
 
 export default async function Home() {
   const [toolsData, workflowsData, dotfilesData] = await Promise.all([
@@ -13,163 +13,61 @@ export default async function Home() {
   const workflows = workflowsData.map((w) => w.frontmatter);
   const dotfiles = dotfilesData.map((d) => d.frontmatter);
 
-  const categories = {
-    LLM: tools.filter((t) => t.category === "LLM"),
-    Agent: tools.filter((t) => t.category === "Agent"),
-    IDE: tools.filter((t) => t.category === "IDE"),
-    CLI: tools.filter((t) => t.category === "CLI"),
-  };
-
   return (
-    <div className="min-h-screen border-l border-gray-300 dark:border-gray-700">
-      {/* Hero Section */}
-      <section className="border-b border-gray-300 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-950">
-        <div className="max-w-3xl">
-          <h1 className="text-5xl font-bold mb-4">ResBook</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
-            A curated directory of AI tools, agentic workflows, dotfiles, and developer tips. All in markdown.
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-500">
-            Explore tools by category, learn workflows from experienced developers, reuse proven
-            configurations, and stay updated with the latest in AI development.
-          </p>
-        </div>
-      </section>
+    <div className="relative border-l border-gray-300 dark:border-gray-700 h-screen overflow-hidden flex flex-col">
+      {/* Grid Background with Content Overlay */}
+      <div className="relative h-screen flex items-center justify-center bg-white dark:bg-black">
+        {/* Grid Background */}
+        <div
+          className={cn(
+            "absolute inset-0",
+            "[background-size:40px_40px]",
+            "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
+            "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+          )}
+        />
+        {/* Radial gradient for fade effect */}
+        <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_30%,black)] dark:bg-black"></div>
 
-      {/* Main Content */}
-      <div className="max-w-3xl px-8 py-12">
-        <section className="mb-16 grid gap-4 md:grid-cols-2">
-          <Link
-            href="/compare"
-            className="block border border-gray-300 p-4 no-underline transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950"
-          >
-            <p className="mb-2 text-xs font-bold uppercase text-gray-600 dark:text-gray-400">New</p>
-            <h2 className="mb-1 text-xl font-bold">Compare Tools</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Select up to four tools and evaluate quality, speed, automation depth, and value side by side.
+        {/* Content Overlay */}
+        <div className="relative z-20 w-full h-full flex flex-col items-center justify-center px-6 py-12 overflow-y-auto">
+          <div className="max-w-2xl w-full">
+            {/* Title */}
+            <h1 className="text-6xl md:text-7xl font-bold text-center mb-6 text-black dark:text-white">
+              ResBook
+            </h1>
+
+            {/* Description */}
+            <p className="text-center text-sm md:text-base text-gray-700 dark:text-gray-300 mb-12">
+              A curated directory of AI tools, agentic workflows, and developer configurations.
             </p>
-          </Link>
 
-          <Link
-            href="/collections"
-            className="block border border-gray-300 p-4 no-underline transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950"
-          >
-            <p className="mb-2 text-xs font-bold uppercase text-gray-600 dark:text-gray-400">New</p>
-            <h2 className="mb-1 text-xl font-bold">Collections</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Save tools, workflows, and dotfiles into reusable stacks tailored for each project goal.
-            </p>
-          </Link>
-        </section>
-
-        {/* Tools by Category */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8">Tools</h2>
-
-          {Object.entries(categories).map(([category, categoryTools]) => (
-            categoryTools.length > 0 && (
-              <div key={category} className="mb-12">
-                <h3 className="text-lg font-bold mb-4 border-b border-gray-300 pb-2 dark:border-gray-700">
-                  {category}
-                </h3>
-                <div className="space-y-4">
-                  {categoryTools.map((tool) => (
-                    <Link
-                      key={tool.slug}
-                      href={`/tools/${tool.slug}`}
-                      className="block border border-gray-300 p-4 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950 transition-colors no-underline"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <h4 className="font-bold text-black dark:text-white mb-1">
-                            {tool.title}
-                          </h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {tool.description}
-                          </p>
-                        </div>
-                        <div className="flex gap-2 whitespace-nowrap">
-                          <span className="text-xs border border-gray-300 px-2 py-1 dark:border-gray-700">
-                            {tool.pricing}
-                          </span>
-                          <span className={`text-xs px-2 py-1 font-bold ${
-                            tool.worthIt
-                              ? 'border border-black bg-white dark:border-white dark:bg-black'
-                              : 'border border-gray-400 text-gray-600 dark:border-gray-600 dark:text-gray-400'
-                          }`}>
-                            {tool.worthIt ? '✓' : '−'}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )
-          ))}
-        </div>
-
-        {/* Workflows Section */}
-        {workflows.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Workflows</h2>
-            <div className="space-y-4">
-              {workflows.map((workflow) => (
-                <Link
-                  key={workflow.slug}
-                  href={`/workflows/${workflow.slug}`}
-                  className="block border border-gray-300 p-4 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950 transition-colors no-underline"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h4 className="font-bold text-black dark:text-white mb-1">
-                        {workflow.title}
-                      </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        {workflow.description}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-500">
-                        by <span className="font-bold">{workflow.author}</span>
-                      </p>
-                    </div>
-                    <span className="text-xs border border-gray-300 px-2 py-1 whitespace-nowrap dark:border-gray-700">
-                      {workflow.complexity}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+            {/* Quick Navigation */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Link
+                href="/tools"
+                className="border border-gray-300 bg-white/80 dark:border-gray-700 dark:bg-black/80 p-4 hover:bg-white dark:hover:bg-black transition-colors text-center no-underline"
+              >
+                <p className="font-bold text-black dark:text-white text-sm">Browse Tools</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">by category</p>
+              </Link>
+              <Link
+                href="/workflows"
+                className="border border-gray-300 bg-white/80 dark:border-gray-700 dark:bg-black/80 p-4 hover:bg-white dark:hover:bg-black transition-colors text-center no-underline"
+              >
+                <p className="font-bold text-black dark:text-white text-sm">Learn Workflows</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">from practitioners</p>
+              </Link>
+              <Link
+                href="/dotfiles"
+                className="border border-gray-300 bg-white/80 dark:border-gray-700 dark:bg-black/80 p-4 hover:bg-white dark:hover:bg-black transition-colors text-center no-underline"
+              >
+                <p className="font-bold text-black dark:text-white text-sm">Explore Dotfiles</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">ready to use</p>
+              </Link>
             </div>
           </div>
-        )}
-
-        {/* Dotfiles Section */}
-        {dotfiles.length > 0 && (
-          <HomeDotfilesBlock dotfiles={dotfiles} />
-        )}
-
-        {/* Stats */}
-        <section className="border-t border-gray-300 pt-12 dark:border-gray-700">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            <div className="border border-gray-300 p-4 text-center dark:border-gray-700">
-              <div className="text-3xl font-bold">{tools.length}</div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">tools</p>
-            </div>
-            <div className="border border-gray-300 p-4 text-center dark:border-gray-700">
-              <div className="text-3xl font-bold">{workflows.length}</div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">workflows</p>
-            </div>
-            <div className="border border-gray-300 p-4 text-center dark:border-gray-700">
-              <div className="text-3xl font-bold">{dotfiles.length}</div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">dotfiles</p>
-            </div>
-            <div className="border border-gray-300 p-4 text-center dark:border-gray-700">
-              <div className="text-3xl font-bold">
-                {tools.filter((t) => t.worthIt).length}
-              </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">recommended</p>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
     </div>
   );

@@ -99,7 +99,7 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen w-64 overflow-y-auto border-r border-black bg-white transition-transform duration-200 dark:border-white dark:bg-black",
+          "fixed left-0 top-0 z-50 h-screen w-96 overflow-y-auto border-r border-black bg-white transition-transform duration-200 dark:border-white dark:bg-black",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           "md:z-30 md:translate-x-0"
         )}

@@ -10,7 +10,6 @@ import { ToolLink } from "@/components/mdx/ToolLink";
 import { WorkflowGraph } from "@/components/mdx/WorkflowGraph";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
-import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 
 interface DotfilePageProps {
   params: Promise<{
@@ -128,14 +127,8 @@ export default async function DotfilePage({ params }: DotfilePageProps) {
               by <strong>{dotfile.frontmatter.author}</strong>
             </span>
             <span className="text-xs text-gray-600 dark:text-gray-400">
-              Added {new Date(dotfile.frontmatter.dateAdded).toLocaleDateString()}
+              Added {dotfile.frontmatter.dateAdded}
             </span>
-            <SaveToCollectionButton
-              itemType="dotfile"
-              slug={dotfile.frontmatter.slug}
-              title={dotfile.frontmatter.title}
-              href={`/dotfiles/${dotfile.frontmatter.slug}`}
-            />
           </div>
 
           {dotfile.frontmatter.toolsUsed.length > 0 && (

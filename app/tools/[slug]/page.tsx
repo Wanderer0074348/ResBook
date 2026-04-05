@@ -10,7 +10,6 @@ import { PromptBlock } from "@/components/mdx/PromptBlock";
 import { ToolLink } from "@/components/mdx/ToolLink";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
-import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 
 interface ToolPageProps {
   params: Promise<{
@@ -97,7 +96,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
     <div className="border-l border-gray-300 dark:border-gray-700 min-h-screen">
       <TableOfContents />
 
-      <div className="max-w-3xl px-8 py-12 ml-0">
+      <div className="max-w-3xl px-8 py-12">
         {/* Breadcrumb */}
         <div className="mb-8 text-sm flex items-center gap-2 text-gray-600 dark:text-gray-400">
           <Link href="/" className="hover:text-black dark:hover:text-white">
@@ -125,14 +124,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
               {tool.frontmatter.pricing}
             </span>
             <span className="text-xs text-gray-600 dark:text-gray-400">
-              Added {new Date(tool.frontmatter.dateAdded).toLocaleDateString()}
+              Added {tool.frontmatter.dateAdded}
             </span>
-            <SaveToCollectionButton
-              itemType="tool"
-              slug={tool.frontmatter.slug}
-              title={tool.frontmatter.title}
-              href={`/tools/${tool.frontmatter.slug}`}
-            />
           </div>
         </div>
 

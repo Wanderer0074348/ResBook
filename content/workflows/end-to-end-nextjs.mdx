@@ -1,103 +1,252 @@
 ---
 title: End-to-End Next.js App with Claude Code
 slug: end-to-end-nextjs
-description: Build a complete Next.js application from scratch using Claude Code and Cursor for rapid development.
+description: Build a complete, production-ready Next.js app from blank directory to deployed—scaffolding, components, API, database, and all.
 author: Tanay Pratap
 complexity: Intermediate
 toolsUsed: [claude-code, cursor]
 dateAdded: 2025-02-20
 ---
 
-## Overview
+## Why This Approach
 
-This workflow demonstrates how to leverage Claude Code and Cursor to build a production-ready Next.js application in minimal time. We'll scaffold a project, generate components, write tests, and deploy—all with AI assistance.
+Most "build an app" guides show you 10% of the work (the fun part) and leave out the other 90% (configuration, error handling, testing, deployment). This workflow covers the full stack end-to-end using AI assistance to move fast without cutting corners.
 
-<WorkflowStep step={1} title="Bootstrap the Project">
-Use Claude Code to initialize a new Next.js project with all necessary configuration:
+You'll use Claude Code for high-level architecture decisions and tricky logic, and Cursor for component scaffolding and IDE integration. By the end, you'll have something deployable, not a prototype.
+
+<WorkflowStep step={1} title="Define Your App and Bootstrap">
+
+First, be clear about what you're building. Write a one-pager:
+
+- **What does it do?** (One sentence. Example: "Let users upload CSVs and get AI-generated charts.")
+- **Key features** (3-5 core features, not 20)
+- **Tech stack opinion**: Do you want Postgres or MongoDB? Auth with NextAuth or Clerk? Do you care about i18n?
+- **Deployment target**: Vercel? Self-hosted? AWS?
+
+Use <ToolLink slug="claude-code" /> to bootstrap:
 
 <PromptBlock agent="USER">
-Create a new Next.js 16 project with:
+I'm building: [app description]
+
+Features:
+1. [Feature 1]
+2. [Feature 2]
+3. [Feature 3]
+
+Stack preferences:
+- Database: [choice]
+- Auth: [choice]
+- Deployment: [choice]
+
+Generate a Next.js project structure with:
 - App Router
 - TypeScript
 - Tailwind CSS v4
-- shadcn/ui components
+- shadcn/ui (or similar component library)
 - ESLint and Prettier
-- Jest testing setup
+- Vitest or Jest for tests
+- Initial folder structure and a basic schema
 
-Use `bun` as the package manager.
+Use `bun` as the package manager if possible.
 </PromptBlock>
 
-Claude will:
-1. Run `bunx create-next-app@latest`
-2. Answer prompts for your preferences
-3. Install and verify dependencies
-4. Create initial project structure
+Claude will give you a complete bootstrap script. Run it, and you'll have a scaffolded project with all your configuration baked in.
 
-Expected time: **2-3 minutes**
+**Time**: 30 minutes (mostly waiting for npm install)
 </WorkflowStep>
 
-<WorkflowStep step={2} title="Design & Generate Core Components">
-Open the project in **Cursor** and use the AI chat to design components:
+<WorkflowStep step={2} title="Design and Build Core UI Components">
+
+Now build the components your app needs. Use <ToolLink slug="cursor" /> for fast iteration:
+
+Start with the "dumb" components (things that just render props):
+- ProductCard, UserProfile, CheckoutItem (display data)
+- Button, Input, Modal (form primitives)
+- Navigation, Footer, Sidebar (layout)
+
+For each, use Cursor to generate:
+1. TypeScript interface for props
+2. Component with Tailwind styling
+3. Basic responsive behavior
+4. A Storybook story (if you use it)
+
+Example:
 
 <PromptBlock agent="USER">
-I need a ProductCard component that shows:
-- Product image
-- Title and description
-- Price with currency
-- Star rating (1-5)
-- Add to cart button
-
-Style it with Tailwind and make it responsive. Include TypeScript types.
+Build a ProductCard component:
+- Props: product (id, name, price, image, rating)
+- Show: image, name, price formatted as USD, star rating (1-5), "Add to Cart" button
+- Responsive: full width on mobile, grid on desktop
+- Accessible: proper ARIA labels
 </PromptBlock>
 
-Cursor will:
-1. Generate the component in `src/components/ProductCard.tsx`
-2. Create TypeScript interfaces
-3. Apply Tailwind styling
-4. Generate a Storybook story (if configured)
+Cursor will scaffold it. Review, adjust styling, commit.
 
-Repeat for other core components:
-- Navigation bar
-- Footer
-- Hero section
-- Product grid layout
+Repeat for 5-8 core components. Don't go crazy—you're not building a design system yet.
 
-Expected time: **5-10 minutes per component**
+**Decision Point**: Are you happy with the look? If not, spend 1 hour refining in Cursor or Claude Code. If yes, move on.
+
+**Time**: 2-3 hours for 5-8 components
 </WorkflowStep>
 
-<WorkflowStep step={3} title="Build API Routes">
-Use Claude Code to scaffold API handlers:
+<WorkflowStep step={3} title="Set Up Database Schema and Queries">
+
+Your UI is ready. Now design your data layer. Use <ToolLink slug="claude-code" /> to think through the schema:
 
 <PromptBlock agent="USER">
-Create API routes for an e-commerce app:
-- GET /api/products (list all products)
-- GET /api/products/[id] (get single product)
-- POST /api/cart (add to cart)
-- POST /api/orders (create order)
+My app [description] needs to store:
+1. [Entity 1] with fields [list]
+2. [Entity 2] with fields [list]
+3. [Entity 3] with fields [list]
 
-Include error handling, validation with Zod, and MongoDB integration hints.
+Generate:
+- Database schema (if using Postgres, give me migrations; if MongoDB, give me validation schemas)
+- TypeScript types for each entity
+- Query builders or utility functions (raw SQL or Prisma, depending on preference)
+
+I'll use these to wire up my API routes.
 </PromptBlock>
 
-Expected output:
-```typescript
-// app/api/products/route.ts
-export async function GET() {
-  // Fetch from database
-}
+Claude will give you a schema, migrations, and typed queries. Install your database client (Prisma, Drizzle, or raw driver), run migrations, and you're set.
 
-// app/api/products/[id]/route.ts
-export async function GET(req, { params }) {
-  // Fetch single product
-}
-```
-
-Expected time: **5-10 minutes**
+**Time**: 1-2 hours
 </WorkflowStep>
 
-<WorkflowStep step={4} title="Implement Data Fetching">
-Connect your components to real data:
+<WorkflowStep step={4} title="Build API Routes">
+
+Now connect your database to the outside world. Use <ToolLink slug="claude-code" /> for API scaffolding:
 
 <PromptBlock agent="USER">
+Build API routes for my app. I need endpoints for:
+1. [Feature 1] - GET /api/[resource], POST /api/[resource]
+2. [Feature 2] - GET /api/[resource]/[id], PUT /api/[resource]/[id]
+3. [Feature 3] - POST /api/[action]
+
+For each:
+- Input validation (Zod schema)
+- Error handling (400/401/500 responses)
+- Database query (using my schema from earlier)
+- Response shape (typed)
+
+Include a few real examples, not just stubs.
+</PromptBlock>
+
+Claude will generate typed, validated API routes. Test them with a tool like Postman or curl before moving on.
+
+**Time**: 2-3 hours
+</WorkflowStep>
+
+<WorkflowStep step={5} title="Wire Components to APIs">
+
+Your UI and API exist separately. Now connect them. Use <ToolLink slug="cursor" /> with built-in AI or Claude Code for tricky state management:
+
+- Add `useState` and `useEffect` to fetch data from your APIs
+- Handle loading/error states
+- Add optimistic updates where it matters (forms, deletes)
+
+If you need complex state (filters, pagination, real-time updates), ask Claude Code for help:
+
+<PromptBlock agent="USER">
+My component needs to:
+1. Fetch a list of [items] from /api/[resource]
+2. Show loading state while fetching
+3. Allow filtering by [field]
+4. Delete items with optimistic update
+
+Show me the component with hooks, error handling, and test skeleton.
+</PromptBlock>
+
+Use <ToolLink slug="cursor" /> to generate and refine. This is fast once your APIs are solid.
+
+**Time**: 3-4 hours
+</WorkflowStep>
+
+<WorkflowStep step={6} title="Add Auth (if needed)">
+
+If your app has users, add authentication. Use <ToolLink slug="claude-code" /> to set it up:
+
+<PromptBlock agent="USER">
+Add authentication to my app:
+- Provider: [NextAuth / Clerk / Supabase Auth]
+- Login flow: [email/password, Google OAuth, magic link]
+- Protect these routes: [/dashboard, /settings, /api/user/*]
+
+Generate:
+- Auth middleware
+- Protected route wrapper
+- Login page skeleton
+- User context or hook
+</PromptBlock>
+
+Most modern auth providers have good integrations. Claude will point you to docs and generate the boilerplate.
+
+**Decision Point**: Simple email/password or OAuth? Clerk/Supabase is faster, but NextAuth gives you more control. Choose based on your complexity.
+
+**Time**: 1-2 hours
+</WorkflowStep>
+
+<WorkflowStep step={7} title="Write Tests and Add Error Handling">
+
+Before you ship, stress-test your code. Use <ToolLink slug="claude-code" /> to add tests:
+
+<PromptBlock agent="USER">
+Write tests for my app:
+1. Component tests (happy path + edge cases): [components]
+2. API tests (200, 400, 401, 500): [routes]
+3. Integration test (user flow): [flow description]
+
+Use Vitest. Include mocks for database calls.
+</PromptBlock>
+
+Aim for 60-70% coverage on critical paths (auth, payment, data mutation). Don't aim for 100%—it's a distraction.
+
+Also add error handling: What happens if the database is down? API is slow? User has no permissions?
+
+**Time**: 2-3 hours
+</WorkflowStep>
+
+<WorkflowStep step={8} title="Deploy">
+
+Your app is tested. Deploy it. Use Vercel (easiest for Next.js):
+
+1. Push to GitHub
+2. Connect repo to Vercel
+3. Set environment variables (database URL, API keys)
+4. Deploy
+
+Vercel handles scaling, CDN, SSL, and preview deployments for PRs.
+
+**Time**: 30 minutes
+
+Then ask Claude Code for a deployment checklist:
+
+<PromptBlock agent="USER">
+I'm shipping my Next.js app. Checklist:
+- [ ] Environment variables are set
+- [ ] Database migrations ran on production
+- [ ] API keys are secure (not in code)
+- [ ] Error tracking is enabled (Sentry, etc.)
+- [ ] Monitoring is set up (response times, errors)
+- [ ] I can roll back if something breaks
+
+What am I missing?
+</PromptBlock>
+
+Fix anything critical, then you're live.
+</WorkflowStep>
+
+## What You'll Have
+
+A complete, deployed Next.js app with:
+- Responsive UI
+- Working API
+- Database persistence
+- Authentication (if needed)
+- Tests for the critical paths
+- Clear error handling
+- A deploy story for updates
+
+Not a prototype—a real product.
 Update ProductCard to:
 - Accept a `productId` prop
 - Fetch product data from /api/products/[id]

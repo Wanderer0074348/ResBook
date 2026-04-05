@@ -14,7 +14,6 @@ import { PageNavigation } from "@/components/PageNavigation";
 import { getWorkflowReadiness } from "@/lib/workflowReadiness";
 import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
 import { ReadinessPanel } from "@/components/workflows/ReadinessPanel";
-import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 
 interface WorkflowPageProps {
   params: Promise<{
@@ -133,14 +132,8 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
               by <strong>{workflow.frontmatter.author}</strong>
             </span>
             <span className="text-xs text-gray-600 dark:text-gray-400">
-              Added {new Date(workflow.frontmatter.dateAdded).toLocaleDateString()}
+              Added {workflow.frontmatter.dateAdded}
             </span>
-            <SaveToCollectionButton
-              itemType="workflow"
-              slug={workflow.frontmatter.slug}
-              title={workflow.frontmatter.title}
-              href={`/workflows/${workflow.frontmatter.slug}`}
-            />
           </div>
 
           {/* Tools Used */}

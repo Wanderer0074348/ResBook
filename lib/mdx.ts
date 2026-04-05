@@ -25,7 +25,10 @@ export async function getTools(): Promise<ToolContent[]> {
         const { data, content: body } = matter(content);
 
         return {
-          frontmatter: data as ToolFrontmatter,
+          frontmatter: {
+            ...data,
+            dateAdded: String(data.dateAdded),
+          } as ToolFrontmatter,
           content: body,
         };
       })
@@ -49,7 +52,10 @@ export async function getWorkflows(): Promise<WorkflowContent[]> {
         const { data, content: body } = matter(content);
 
         return {
-          frontmatter: data as WorkflowFrontmatter,
+          frontmatter: {
+            ...data,
+            dateAdded: String(data.dateAdded),
+          } as WorkflowFrontmatter,
           content: body,
         };
       })
@@ -73,7 +79,10 @@ export async function getDotfiles(): Promise<DotfileContent[]> {
         const { data, content: body } = matter(content);
 
         return {
-          frontmatter: data as DotfileFrontmatter,
+          frontmatter: {
+            ...data,
+            dateAdded: String(data.dateAdded),
+          } as DotfileFrontmatter,
           content: body,
         };
       })
@@ -91,7 +100,10 @@ export async function getToolBySlug(slug: string): Promise<ToolContent | null> {
     const { data, content: body } = matter(content);
 
     return {
-      frontmatter: data as ToolFrontmatter,
+      frontmatter: {
+        ...data,
+        dateAdded: String(data.dateAdded),
+      } as ToolFrontmatter,
       content: body,
     };
   } catch {
@@ -106,7 +118,10 @@ export async function getWorkflowBySlug(slug: string): Promise<WorkflowContent |
     const { data, content: body } = matter(content);
 
     return {
-      frontmatter: data as WorkflowFrontmatter,
+      frontmatter: {
+        ...data,
+        dateAdded: String(data.dateAdded),
+      } as WorkflowFrontmatter,
       content: body,
     };
   } catch {
@@ -121,7 +136,10 @@ export async function getDotfileBySlug(slug: string): Promise<DotfileContent | n
     const { data, content: body } = matter(content);
 
     return {
-      frontmatter: data as DotfileFrontmatter,
+      frontmatter: {
+        ...data,
+        dateAdded: String(data.dateAdded),
+      } as DotfileFrontmatter,
       content: body,
     };
   } catch {

@@ -29,13 +29,17 @@ export default async function WorkflowsPage() {
             Reproducible blueprints for shipping faster with AI tools.
           </p>
         </div>
-
-        {workflows.length === 0 ? (
-          <p className="text-gray-600 dark:text-gray-400">No workflows published yet.</p>
-        ) : (
-          <WorkflowsExplorer workflows={workflows} />
-        )}
       </div>
+
+      {workflows.length === 0 ? (
+        <div className="max-w-3xl px-8 py-12">
+          <p className="text-gray-600 dark:text-gray-400">No workflows published yet.</p>
+        </div>
+      ) : (
+        <div className="px-8 py-12">
+          <WorkflowsExplorer workflows={workflows} />
+        </div>
+      )}
     </div>
   );
 }

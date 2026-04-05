@@ -1,24 +1,27 @@
 ---
 title: From Idea to Shipped Landing Page
 slug: from-idea-to-shipped-landing-page
-description: Validate a product idea and ship a polished landing page in one focused sprint.
+description: Take a product idea from concept to a live landing page, testing your positioning and value prop in front of real users.
 author: Manav Arya Singh
 complexity: Beginner
 toolsUsed: [v0, cursor, claude-code, github-copilot]
 dateAdded: 2026-04-05
 ---
 
-## Goal
-Go from rough product concept to a production landing page with clear positioning and CTA flow.
+## Why This Workflow
+
+You have a product idea but haven't validated it yet. A landing page does three things: it forces you to articulate exactly who your users are, what problem you're solving, and why they should care. By shipping it, you can start collecting actual signal (email signups, user feedback) instead of guessing. This workflow gets you from rough concept to live in about 3-5 days.
+
+## The Flow
 
 <WorkflowGraph
   height={340}
   nodes={[
-    { id: "1", data: { label: "Idea + ICP" }, position: { x: 0, y: 90 } },
-    { id: "2", data: { label: "Messaging Draft" }, position: { x: 190, y: 90 } },
-    { id: "3", data: { label: "UI Generation" }, position: { x: 380, y: 90 } },
-    { id: "4", data: { label: "Code Polish" }, position: { x: 570, y: 90 } },
-    { id: "5", data: { label: "Deploy + QA" }, position: { x: 760, y: 90 } }
+    { id: "1", data: { label: "💡 Idea + ICP\nWho & Why" }, position: { x: 0, y: 90 }, style: { background: "#f3f4f6", border: "2px solid #000" } },
+    { id: "2", data: { label: "✍️ Messaging\nThe Promise" }, position: { x: 190, y: 90 }, style: { background: "#f3f4f6", border: "2px solid #000" } },
+    { id: "3", data: { label: "🎨 UI Generation\nLayout" }, position: { x: 380, y: 90 }, style: { background: "#f3f4f6", border: "2px solid #000" } },
+    { id: "4", data: { label: "⚙️ Code Polish\nResponsive" }, position: { x: 570, y: 90 }, style: { background: "#f3f4f6", border: "2px solid #000" } },
+    { id: "5", data: { label: "🚀 Deploy & QA\nLive" }, position: { x: 760, y: 90 }, style: { background: "#f3f4f6", border: "2px solid #000" } }
   ]}
   edges={[
     { id: "e1-2", source: "1", target: "2" },
@@ -28,25 +31,91 @@ Go from rough product concept to a production landing page with clear positionin
   ]}
 />
 
-<WorkflowStep step={1} title="Define ICP and Core Promise">
-Write a one-line promise for your target user and 3 pain points you solve.
+<WorkflowStep step={1} title="Define Your ICP and Core Promise">
 
-<PromptBlock agent="strategy">
-Given this product concept, draft ICP, top pains, desired outcome, and one crisp value proposition.
+Before any design or code happens, you need absolute clarity on two things: who you're building for and what you're promising them. This sounds obvious, but most product ideas fail here because the creator skips this step and builds in a vacuum.
+
+Spend an hour and write out three things:
+
+**Who is your ideal customer?** Don't say "anyone with a pulse." Be specific. What's their job title? What tool are they using today that frustrates them? If you're building a reporting tool, is it for finance teams overwhelmed by spreadsheets, or engineering teams drowning in metrics? These are different people with different pain points.
+
+**What three specific problems do you solve?** "Makes work faster" means nothing. "Reduces weekly reporting from 8 hours to 30 minutes for finance teams" is concrete. It's testable and memorable. Pick three problems your ICP actually has, and be specific about the before/after.
+
+**What's your one-line promise?** This is the sentence someone remembers. "Turns Figma designs into React code automatically." "The first AI that understands your codebase." "Ship features 3x faster with AI pairing." It should land in about 10 seconds.
+
+Now pressure-test this against reality. Use <ToolLink slug="claude-code" /> to poke holes:
+
+<PromptBlock agent="USER">
+I'm building [product] for [ICP]. 
+
+Right now they [describe their current workflow], which is painful because [specific pain].
+
+My positioning: [one-liner]
+
+My three problems I solve:
+1. [Problem 1]
+2. [Problem 2]
+3. [Problem 3]
+
+Does this actually resonate with the ICP? Are there gaps in the logic? What would make the positioning tighter or more credible?
 </PromptBlock>
+
+Claude will ask clarifying questions. You'll iterate a few times. By the end, you'll have messaging that's sharp and defensible. That's what goes on your landing page.
+
+This takes 1-2 hours and is the most important time you'll spend. A tight ICP and promise saves you from building the wrong thing.
 </WorkflowStep>
 
-<WorkflowStep step={2} title="Generate Initial UI">
-Use <ToolLink slug="v0" /> to create an initial hero, features, and CTA layout.
+<WorkflowStep step={2} title="Generate Initial UI with V0">
+
+You have your positioning locked. Now you need a visual structure to present it. This is where most people either get stuck staring at Figma, or they build something that doesn't reflect their messaging.
+
+Use <ToolLink slug="v0" /> to generate a starting layout. You're not looking for pixel-perfect design here—you're looking for a skeleton that holds your message upright. Three sections works well:
+
+Start with a hero that states your promise clearly. Big headline (your one-liner), a sentence or two of supporting copy, and one clear CTA. Then show the problems. Not as a list, but as something your ICP would recognize in their own day. Finally, show how you solve each problem. Not features—solutions. "Instead of waiting 8 hours for reports, you get them in 30 minutes" is better than "Real-time report generation engine."
+
+V0 generates styled React code. Use it as-is, but remember you're iterating tomorrow, so don't obsess over the colors or spacing.
+
+**Decision Point**: If design is core to your product (building a design tool, marketing agency, design-focused SaaS), spend 2-3 hours refining the V0 output in <ToolLink slug="cursor" />. If design is secondary (B2B admin tool, internal app), ship the V0 output as-is. You'll validate your message, not your design.
 </WorkflowStep>
 
-<WorkflowStep step={3} title="Refine Copy and Structure">
-Use <ToolLink slug="claude-code" /> and <ToolLink slug="cursor" /> to improve section order, scannability, and conversion clarity.
+<WorkflowStep step={3} title="Refine Copy and Section Order">
+
+Your V0 layout is live. Now the messaging needs to land harder. This is where most pages fail—the copy is either too generic or it talks about features instead of benefits. You want your ICP to read the first paragraph and think "they're describing my life."
+
+Use <ToolLink slug="claude-code" /> to tighten the copy and check the flow:
+
+<PromptBlock agent="USER">
+Here's my landing page. Headline: [headline], ICP: [ICP].
+
+Review for:
+- Scannability: Can someone grasp the value in 10 seconds without reading everything?
+- Specificity: Are there vague words like "fast", "powerful", "easy"? Make them concrete with numbers or examples.
+- CTA clarity: Is it crystal clear what I want the user to do next?
+- Section order: Does the flow feel natural? Does it build a case?
+
+Give me specific rewrites, not bullet feedback. Show me the new copy.
+</PromptBlock>
+
+You'll usually move sections around once or twice. A pattern that works: Hero (the promise) → Problems (show you understand their pain) → Solution (here's how we fix it) → Results or social proof (if you have it) → CTA (low friction: "Get early access" is better than "Start free trial").
+
+This round takes 1-2 hours and is usually where a landing page stops feeling generic and starts feeling personal.
 </WorkflowStep>
 
-<WorkflowStep step={4} title="Ship and Verify">
-Run mobile QA, verify metadata/social cards, and deploy.
+<WorkflowStep step={4} title="Polish Code and Deploy">
+
+Your messaging is solid. Now make it bulletproof before you ship. Use <ToolLink slug="cursor" /> to handle the last-mile work.
+
+Responsive design matters way more than you think—most people visiting landing pages are on mobile. Pull up your phone and actually use it. Does the hero headline make sense at 375px wide? Can you tap the CTA without zooming? If something feels off, fix it.
+
+Add the infrastructure: open graph metadata (so when someone shares your link on Slack or Twitter, it shows a nice preview), an email capture tool (Buttondown, Loops, or just direct to your email), and maybe a basic analytics snippet if you want to track signups.
+
+Test before deploying. Load the page on a real phone. Click the CTA and make sure it goes somewhere real. Share the link to Slack and check the preview. Load the page and make sure it doesn't feel slow. No console errors should be visible.
+
+Then deploy to Vercel. Point a domain at it so it feels real when you share it. You're not launching publicly yet—you're getting the page live so you can send it to potential users and get real feedback.
+
+This takes 2-3 hours including a final review pass.
 </WorkflowStep>
 
-## Expected Output
-A clean landing page with coherent messaging and deployment-ready code.
+## What You'll Have
+
+A live landing page with clear positioning, your ICP validated against actual messaging, and a way to start collecting signal (email signups, early feedback). You're not building a product yet—you're testing if your positioning resonates. Use the next 1-2 weeks to collect feedback from your target users and iterate on the messaging before you start coding the actual product.

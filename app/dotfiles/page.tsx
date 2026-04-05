@@ -29,13 +29,17 @@ export default async function DotfilesPage() {
             Practical prompt packs, config snippets, and reusable starter structures.
           </p>
         </div>
-
-        {dotfiles.length === 0 ? (
-          <p className="text-gray-600 dark:text-gray-400">No dotfiles published yet.</p>
-        ) : (
-          <DotfilesExplorer dotfiles={dotfiles} />
-        )}
       </div>
+
+      {dotfiles.length === 0 ? (
+        <div className="max-w-3xl px-8 py-12">
+          <p className="text-gray-600 dark:text-gray-400">No dotfiles published yet.</p>
+        </div>
+      ) : (
+        <div className="px-8 py-12">
+          <DotfilesExplorer dotfiles={dotfiles} />
+        </div>
+      )}
     </div>
   );
 }

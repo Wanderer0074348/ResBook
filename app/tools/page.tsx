@@ -29,9 +29,17 @@ export default async function ToolsPage() {
             Curated AI tools with practical reviews and quick verdicts.
           </p>
         </div>
-
-        {tools.length === 0 ? <p className="text-gray-600 dark:text-gray-400">No tools published yet.</p> : <ToolsExplorer tools={tools} />}
       </div>
+
+      {tools.length === 0 ? (
+        <div className="max-w-3xl px-8 py-12">
+          <p className="text-gray-600 dark:text-gray-400">No tools published yet.</p>
+        </div>
+      ) : (
+        <div className="px-8 py-12">
+          <ToolsExplorer tools={tools} />
+        </div>
+      )}
     </div>
   );
 }
