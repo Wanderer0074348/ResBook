@@ -1,8 +1,10 @@
 import type { DotfileFrontmatter, ToolFrontmatter, WorkflowFrontmatter } from "@/lib/types";
+import { getWorkflowReadiness, type WorkflowReadinessTier } from "@/lib/workflowReadiness";
 
 export type RecommendationFilter = "all" | "recommended" | "not-recommended";
 export type ToolSortOption = "newest" | "oldest" | "title";
-export type WorkflowSortOption = "newest" | "oldest" | "title";
+export type WorkflowSortOption = "newest" | "oldest" | "title" | "readiness";
+export type WorkflowReadinessFilter = "All" | WorkflowReadinessTier;
 export type DotfileSortOption = "newest" | "oldest" | "title";
 
 export interface ToolFilterInput {
@@ -17,6 +19,7 @@ export interface WorkflowFilterInput {
   searchTerm: string;
   complexity: "All" | WorkflowFrontmatter["complexity"];
   toolFilter: string;
+  readiness: WorkflowReadinessFilter;
   sortBy: WorkflowSortOption;
 }
 
@@ -94,33 +97,49 @@ export function filterAndSortWorkflows(
 ): WorkflowFrontmatter[] {
   const normalizedQuery = input.searchTerm.trim().toLowerCase();
 
-  const filtered = workflows.filter((workflow) => {
-    const matchesSearch =
-      normalizedQuery.length === 0 ||
-      workflow.title.toLowerCase().includes(normalizedQuery) ||
-      workflow.description.toLowerCase().includes(normalizedQuery) ||
-      workflow.author.toLowerCase().includes(normalizedQuery);
+  const filtered = workflows
+    .map((workflow) => ({
+      workflow,
+      readiness: getWorkflowReadiness(workflow),
+    }))
+    .filter(({ workflow, readiness }) => {
+      const matchesSearch =
+        normalizedQuery.length === 0 ||
+        workflow.title.toLowerCase().includes(normalizedQuery) ||
+        workflow.description.toLowerCase().includes(normalizedQuery) ||
+        workflow.author.toLowerCase().includes(normalizedQuery);
 
-    const matchesComplexity = input.complexity === "All" || workflow.complexity === input.complexity;
-    const matchesTool = input.toolFilter === "All" || workflow.toolsUsed.includes(input.toolFilter);
+      const matchesComplexity = input.complexity === "All" || workflow.complexity === input.complexity;
+      const matchesTool = input.toolFilter === "All" || workflow.toolsUsed.includes(input.toolFilter);
+      const matchesReadiness = input.readiness === "All" || readiness.tier === input.readiness;
 
-    return matchesSearch && matchesComplexity && matchesTool;
-  });
+      return matchesSearch && matchesComplexity && matchesTool && matchesReadiness;
+    });
 
-  return [...filtered].sort((a, b) => {
-    if (input.sortBy === "title") {
-      return a.title.localeCompare(b.title);
-    }
+  return [...filtered]
+    .sort((a, b) => {
+      if (input.sortBy === "readiness") {
+        if (a.readiness.score !== b.readiness.score) {
+          return b.readiness.score - a.readiness.score;
+        }
 
-    const aTime = safeTimestamp(a.dateAdded);
-    const bTime = safeTimestamp(b.dateAdded);
+        return safeTimestamp(b.workflow.dateAdded) - safeTimestamp(a.workflow.dateAdded);
+      }
 
-    if (input.sortBy === "oldest") {
-      return aTime - bTime;
-    }
+      if (input.sortBy === "title") {
+        return a.workflow.title.localeCompare(b.workflow.title);
+      }
 
-    return bTime - aTime;
-  });
+      const aTime = safeTimestamp(a.workflow.dateAdded);
+      const bTime = safeTimestamp(b.workflow.dateAdded);
+
+      if (input.sortBy === "oldest") {
+        return aTime - bTime;
+      }
+
+      return bTime - aTime;
+    })
+    .map(({ workflow }) => workflow);
 }
 
 export function filterAndSortDotfiles(

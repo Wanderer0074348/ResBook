@@ -11,6 +11,10 @@ import { ToolLink } from "@/components/mdx/ToolLink";
 import { WorkflowGraph } from "@/components/mdx/WorkflowGraph";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
+import { getWorkflowReadiness } from "@/lib/workflowReadiness";
+import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
+import { ReadinessPanel } from "@/components/workflows/ReadinessPanel";
+import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 
 interface WorkflowPageProps {
   params: Promise<{
@@ -82,6 +86,8 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
     notFound();
   }
 
+  const readiness = getWorkflowReadiness(workflow.frontmatter);
+
   // Get all workflows for navigation
   const allWorkflows = await getWorkflows();
   const currentIndex = allWorkflows.findIndex((w) => w.frontmatter.slug === slug);
@@ -122,12 +128,19 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
             <span className="text-xs font-bold uppercase bg-gray-100 dark:bg-gray-900 px-3 py-1 border border-gray-300 dark:border-gray-700">
               {workflow.frontmatter.complexity}
             </span>
+            <ReadinessBadge score={readiness.score} tier={readiness.tier} />
             <span className="text-sm">
               by <strong>{workflow.frontmatter.author}</strong>
             </span>
             <span className="text-xs text-gray-600 dark:text-gray-400">
               Added {new Date(workflow.frontmatter.dateAdded).toLocaleDateString()}
             </span>
+            <SaveToCollectionButton
+              itemType="workflow"
+              slug={workflow.frontmatter.slug}
+              title={workflow.frontmatter.title}
+              href={`/workflows/${workflow.frontmatter.slug}`}
+            />
           </div>
 
           {/* Tools Used */}
@@ -149,6 +162,8 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
               </div>
             </div>
           )}
+
+          <ReadinessPanel workflow={workflow.frontmatter} readiness={readiness} />
         </div>
 
         {/* Content */}

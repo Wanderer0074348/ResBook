@@ -13,6 +13,12 @@ export function Navbar() {
             <Link href="/" className="hover:opacity-75">
               home
             </Link>
+            <Link href="/compare" className="hover:opacity-75">
+              compare
+            </Link>
+            <Link href="/collections" className="hover:opacity-75">
+              collections
+            </Link>
             <Link href="/#tools" className="hover:opacity-75">
               tools
             </Link>

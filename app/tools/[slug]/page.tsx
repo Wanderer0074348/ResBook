@@ -10,6 +10,7 @@ import { PromptBlock } from "@/components/mdx/PromptBlock";
 import { ToolLink } from "@/components/mdx/ToolLink";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
+import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 
 interface ToolPageProps {
   params: Promise<{
@@ -126,6 +127,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
             <span className="text-xs text-gray-600 dark:text-gray-400">
               Added {new Date(tool.frontmatter.dateAdded).toLocaleDateString()}
             </span>
+            <SaveToCollectionButton
+              itemType="tool"
+              slug={tool.frontmatter.slug}
+              title={tool.frontmatter.title}
+              href={`/tools/${tool.frontmatter.slug}`}
+            />
           </div>
         </div>
 

@@ -49,6 +49,12 @@ const workflows: WorkflowFrontmatter[] = [
     complexity: "Intermediate",
     toolsUsed: ["alpha-cli", "beta-ide"],
     dateAdded: "2026-04-03",
+    estimatedHours: 8,
+    setupComplexity: 3,
+    dependencyRisk: 4,
+    observability: 3,
+    maintenanceLevel: "Medium",
+    failurePoints: ["env mismatch", "test flakiness"],
   },
   {
     title: "Research Loop",
@@ -58,6 +64,11 @@ const workflows: WorkflowFrontmatter[] = [
     complexity: "Beginner",
     toolsUsed: ["gamma-llm"],
     dateAdded: "2026-04-01",
+    estimatedHours: 3,
+    setupComplexity: 2,
+    dependencyRisk: 1,
+    observability: 4,
+    maintenanceLevel: "Low",
   },
 ];
 
@@ -130,6 +141,7 @@ describe("workflow listing filters", () => {
       searchTerm: "",
       complexity: "All",
       toolFilter: "gamma-llm",
+      readiness: "All",
       sortBy: "newest",
     });
 
@@ -142,11 +154,37 @@ describe("workflow listing filters", () => {
       searchTerm: "analyst",
       complexity: "All",
       toolFilter: "All",
+      readiness: "All",
       sortBy: "newest",
     });
 
     expect(result).toHaveLength(1);
     expect(result[0].slug).toBe("research-loop");
+  });
+
+  it("filters by readiness tier", () => {
+    const result = filterAndSortWorkflows(workflows, {
+      searchTerm: "",
+      complexity: "All",
+      toolFilter: "All",
+      readiness: "High",
+      sortBy: "newest",
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].slug).toBe("research-loop");
+  });
+
+  it("sorts by readiness score", () => {
+    const result = filterAndSortWorkflows(workflows, {
+      searchTerm: "",
+      complexity: "All",
+      toolFilter: "All",
+      readiness: "All",
+      sortBy: "readiness",
+    });
+
+    expect(result.map((item) => item.slug)).toEqual(["research-loop", "launch-sprint"]);
   });
 });
 

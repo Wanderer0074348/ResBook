@@ -38,6 +38,30 @@ export default async function Home() {
 
       {/* Main Content */}
       <div className="max-w-3xl px-8 py-12">
+        <section className="mb-16 grid gap-4 md:grid-cols-2">
+          <Link
+            href="/compare"
+            className="block border border-gray-300 p-4 no-underline transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950"
+          >
+            <p className="mb-2 text-xs font-bold uppercase text-gray-600 dark:text-gray-400">New</p>
+            <h2 className="mb-1 text-xl font-bold">Compare Tools</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Select up to four tools and evaluate quality, speed, automation depth, and value side by side.
+            </p>
+          </Link>
+
+          <Link
+            href="/collections"
+            className="block border border-gray-300 p-4 no-underline transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950"
+          >
+            <p className="mb-2 text-xs font-bold uppercase text-gray-600 dark:text-gray-400">New</p>
+            <h2 className="mb-1 text-xl font-bold">Collections</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Save tools, workflows, and dotfiles into reusable stacks tailored for each project goal.
+            </p>
+          </Link>
+        </section>
+
         {/* Tools by Category */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-8">Tools</h2>

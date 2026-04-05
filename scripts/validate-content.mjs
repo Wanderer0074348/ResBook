@@ -33,6 +33,7 @@ const workflowSchema = {
   ],
   enums: {
     complexity: new Set(["Beginner", "Intermediate", "Advanced"]),
+    maintenanceLevel: new Set(["Low", "Medium", "High"]),
   },
 };
 
@@ -66,6 +67,38 @@ function assertType(field, value, expectedType, errors, filePath) {
   const valueType = Array.isArray(value) ? "array" : typeof value;
   if (valueType !== expectedType) {
     errors.push(`${filePath}: frontmatter "${field}" must be ${expectedType}, got ${valueType}`);
+  }
+}
+
+function validateStringArrayField(data, field, filePath, errors) {
+  if (!(field in data)) {
+    return;
+  }
+
+  if (!Array.isArray(data[field])) {
+    errors.push(`${filePath}: frontmatter "${field}" must be an array of strings`);
+    return;
+  }
+
+  const nonStringValue = data[field].find((item) => typeof item !== "string");
+  if (nonStringValue !== undefined) {
+    errors.push(`${filePath}: frontmatter "${field}" must only contain strings`);
+  }
+}
+
+function validateScaleField(data, field, filePath, errors) {
+  if (!(field in data)) {
+    return;
+  }
+
+  assertType(field, data[field], "number", errors, filePath);
+
+  if (typeof data[field] !== "number") {
+    return;
+  }
+
+  if (!Number.isInteger(data[field]) || data[field] < 1 || data[field] > 5) {
+    errors.push(`${filePath}: frontmatter "${field}" must be an integer between 1 and 5`);
   }
 }
 
@@ -108,12 +141,44 @@ function validateSharedFrontmatter(data, schema, filePath, errors) {
 function validateToolFrontmatter(data, filePath, errors) {
   validateSharedFrontmatter(data, toolSchema, filePath, errors);
   if ("worthIt" in data) assertType("worthIt", data.worthIt, "boolean", errors, filePath);
+
+  validateScaleField(data, "easeOfUse", filePath, errors);
+  validateScaleField(data, "outputQuality", filePath, errors);
+  validateScaleField(data, "speed", filePath, errors);
+  validateScaleField(data, "automationDepth", filePath, errors);
+  validateScaleField(data, "collaboration", filePath, errors);
+
+  validateStringArrayField(data, "bestFor", filePath, errors);
+  validateStringArrayField(data, "integrations", filePath, errors);
+
+  if ("startingPriceUsdMonthly" in data) {
+    assertType("startingPriceUsdMonthly", data.startingPriceUsdMonthly, "number", errors, filePath);
+
+    if (typeof data.startingPriceUsdMonthly === "number" && data.startingPriceUsdMonthly < 0) {
+      errors.push(`${filePath}: frontmatter "startingPriceUsdMonthly" must be zero or greater`);
+    }
+  }
 }
 
 function validateWorkflowFrontmatter(data, filePath, errors, validToolSlugs) {
   validateSharedFrontmatter(data, workflowSchema, filePath, errors);
 
   if ("author" in data) assertType("author", data.author, "string", errors, filePath);
+
+  if ("estimatedHours" in data) {
+    assertType("estimatedHours", data.estimatedHours, "number", errors, filePath);
+
+    if (typeof data.estimatedHours === "number" && data.estimatedHours <= 0) {
+      errors.push(`${filePath}: frontmatter "estimatedHours" must be a positive number`);
+    }
+  }
+
+  validateScaleField(data, "setupComplexity", filePath, errors);
+  validateScaleField(data, "dependencyRisk", filePath, errors);
+  validateScaleField(data, "observability", filePath, errors);
+
+  validateStringArrayField(data, "prerequisites", filePath, errors);
+  validateStringArrayField(data, "failurePoints", filePath, errors);
 
   if ("toolsUsed" in data) {
     const isArray = Array.isArray(data.toolsUsed);

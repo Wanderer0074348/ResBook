@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { DotfileFrontmatter, ToolFrontmatter, WorkflowFrontmatter } from "@/lib/types";
+import { getWorkflowReadiness } from "@/lib/workflowReadiness";
+import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
 
 interface SearchClientProps {
   initialTools: ToolFrontmatter[];
@@ -88,28 +90,35 @@ export function SearchClient({ initialTools, initialWorkflows, initialDotfiles }
           <p className="text-gray-500">no workflows found</p>
         ) : (
           <div className="space-y-3">
-            {filteredWorkflows.map((workflow) => (
-              <Link
-                key={workflow.slug}
-                href={`/workflows/${workflow.slug}`}
-                className="block border border-black p-4 hover:bg-gray-100 dark:border-white dark:hover:bg-gray-900"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="font-bold">{workflow.title}</h3>
-                    <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
-                      {workflow.description}
-                    </p>
-                    <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                      by {workflow.author}
-                    </p>
+            {filteredWorkflows.map((workflow) => {
+              const readiness = getWorkflowReadiness(workflow);
+
+              return (
+                <Link
+                  key={workflow.slug}
+                  href={`/workflows/${workflow.slug}`}
+                  className="block border border-black p-4 hover:bg-gray-100 dark:border-white dark:hover:bg-gray-900"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="font-bold">{workflow.title}</h3>
+                      <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
+                        {workflow.description}
+                      </p>
+                      <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                        by {workflow.author}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <span className="border border-black px-2 py-1 text-xs dark:border-white">
+                        {workflow.complexity}
+                      </span>
+                      <ReadinessBadge score={readiness.score} tier={readiness.tier} />
+                    </div>
                   </div>
-                  <span className="border border-black px-2 py-1 text-xs dark:border-white">
-                    {workflow.complexity}
-                  </span>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </section>

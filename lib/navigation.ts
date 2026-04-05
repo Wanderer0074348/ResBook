@@ -17,6 +17,16 @@ export const navigation: NavItem[] = [
     icon: "search",
   },
   {
+    label: "Compare",
+    href: "/compare",
+    icon: "compare",
+  },
+  {
+    label: "Collections",
+    href: "/collections",
+    icon: "bookmark",
+  },
+  {
     label: "Tools",
     href: "/tools",
     icon: "tools",
