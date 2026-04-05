@@ -2,7 +2,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getWorkflowBySlug, getAllWorkflowSlugs, getWorkflows } from "@/lib/mdx";
+import { getWorkflowBySlug, getAllWorkflowSlugs, getWorkflows, getTools } from "@/lib/mdx";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 import { Verdict } from "@/components/mdx/Verdict";
 import { WorkflowStep } from "@/components/mdx/WorkflowStep";
@@ -87,8 +87,27 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
 
   const readiness = getWorkflowReadiness(workflow.frontmatter);
 
-  // Get all workflows for navigation
-  const allWorkflows = await getWorkflows();
+  // Get all workflows for navigation and tool metadata for richer tool cards.
+  const [allWorkflows, allTools] = await Promise.all([getWorkflows(), getTools()]);
+
+  const toolMetadata = new Map(allTools.map((tool) => [tool.frontmatter.slug, tool.frontmatter]));
+  const workflowTools = workflow.frontmatter.toolsUsed.map((toolSlug) => {
+    const metadata = toolMetadata.get(toolSlug);
+
+    return {
+      slug: toolSlug,
+      title: metadata?.title ?? toolSlug,
+      category: metadata?.category,
+      pricing: metadata?.pricing,
+    };
+  });
+
+  const stepCount = (workflow.content.match(/<WorkflowStep\b/g) ?? []).length;
+  const promptCount = (workflow.content.match(/<PromptBlock\b/g) ?? []).length;
+  const prerequisiteCount = workflow.frontmatter.prerequisites?.length ?? 0;
+  const failurePointCount = workflow.frontmatter.failurePoints?.length ?? 0;
+  const visibleFlowNodes = Math.min(stepCount, 12);
+
   const currentIndex = allWorkflows.findIndex((w) => w.frontmatter.slug === slug);
   const prevWorkflow =
     currentIndex > 0
@@ -136,20 +155,82 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
             </span>
           </div>
 
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="border border-gray-300 p-3 dark:border-gray-700">
+              <p className="text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Estimated time</p>
+              <p className="mt-2 text-xl font-bold">{Math.round(readiness.inputs.estimatedHours)}h</p>
+            </div>
+            <div className="border border-gray-300 p-3 dark:border-gray-700">
+              <p className="text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Workflow steps</p>
+              <p className="mt-2 text-xl font-bold">{stepCount}</p>
+            </div>
+            <div className="border border-gray-300 p-3 dark:border-gray-700">
+              <p className="text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Prompt blocks</p>
+              <p className="mt-2 text-xl font-bold">{promptCount}</p>
+            </div>
+            <div className="border border-gray-300 p-3 dark:border-gray-700">
+              <p className="text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Known risks</p>
+              <p className="mt-2 text-xl font-bold">{failurePointCount}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 border border-gray-300 p-4 dark:border-gray-700">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <p className="text-xs font-bold uppercase text-gray-600 dark:text-gray-400">Execution flow</p>
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                {stepCount} step{stepCount === 1 ? "" : "s"} · {prerequisiteCount} prerequisite{prerequisiteCount === 1 ? "" : "s"}
+              </span>
+            </div>
+            {stepCount === 0 ? (
+              <p className="text-sm text-gray-600 dark:text-gray-400">No workflow steps were detected in this write-up yet.</p>
+            ) : (
+              <div className="flex flex-wrap items-center gap-2">
+                {Array.from({ length: visibleFlowNodes }).map((_, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-gray-400 text-xs font-bold dark:border-gray-600">
+                      {index + 1}
+                    </span>
+                    {index < visibleFlowNodes - 1 && (
+                      <span className="h-px w-6 bg-gray-300 dark:bg-gray-700" aria-hidden="true" />
+                    )}
+                  </div>
+                ))}
+                {stepCount > visibleFlowNodes && (
+                  <span className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-300">
+                    +{stepCount - visibleFlowNodes} more
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
           {/* Tools Used */}
-          {workflow.frontmatter.toolsUsed.length > 0 && (
+          {workflowTools.length > 0 && (
             <div className="border-t border-gray-300 pt-4 dark:border-gray-700 mt-6">
               <p className="text-xs font-bold uppercase mb-3 text-gray-600 dark:text-gray-400">
                 Tools used
               </p>
-              <div className="flex flex-wrap gap-2">
-                {workflow.frontmatter.toolsUsed.map((toolSlug) => (
+              <div className="grid gap-2 sm:grid-cols-2">
+                {workflowTools.map((tool) => (
                   <Link
-                    key={toolSlug}
-                    href={`/tools/${toolSlug}`}
-                    className="text-xs border border-gray-300 px-3 py-1 bg-gray-50 dark:bg-gray-950 dark:border-gray-700"
+                    key={tool.slug}
+                    href={`/tools/${tool.slug}`}
+                    className="border border-gray-300 bg-gray-50 p-3 transition-colors hover:bg-white dark:border-gray-700 dark:bg-gray-950 dark:hover:bg-gray-900"
                   >
-                    {toolSlug}
+                    <p className="text-sm font-semibold leading-tight">{tool.title}</p>
+                    <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">/{tool.slug}</p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {tool.category && (
+                        <span className="border border-gray-300 px-2 py-1 text-[11px] uppercase dark:border-gray-700">
+                          {tool.category}
+                        </span>
+                      )}
+                      {tool.pricing && (
+                        <span className="border border-gray-300 px-2 py-1 text-[11px] uppercase dark:border-gray-700">
+                          {tool.pricing}
+                        </span>
+                      )}
+                    </div>
                   </Link>
                 ))}
               </div>

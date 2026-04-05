@@ -1,6 +1,7 @@
 import type { WorkflowFrontmatter } from "@/lib/types";
 import type { WorkflowReadinessResult } from "@/lib/workflowReadiness";
 import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
+import { ReadinessBreakdown } from "@/components/workflows/ReadinessBreakdown";
 
 interface ReadinessPanelProps {
   workflow: WorkflowFrontmatter;
@@ -54,6 +55,10 @@ export function ReadinessPanel({ workflow, readiness }: ReadinessPanelProps) {
           </dd>
         </div>
       </dl>
+
+      <div className="mt-4">
+        <ReadinessBreakdown readiness={readiness} />
+      </div>
 
       {prerequisites.length > 0 && (
         <div className="mt-4">
