@@ -43,10 +43,21 @@ export default function ResourcesPage() {
           </ul>
         </section>
 
+        <section className="mb-8 border border-gray-300 p-4 dark:border-gray-700">
+          <h2 className="text-xl font-bold mb-3">Dotfile Template</h2>
+          <ul className="list-disc pl-5 text-sm text-gray-700 dark:text-gray-300">
+            <li>Overview and intended use case</li>
+            <li>Prompt pack or config snippets with examples</li>
+            <li>Tool compatibility and setup instructions</li>
+            <li>Maintenance notes and update cadence</li>
+          </ul>
+        </section>
+
         <section className="border border-gray-300 p-4 dark:border-gray-700">
           <h2 className="text-xl font-bold mb-3">Contribute</h2>
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-            Add new entries in content/tools or content/workflows as MDX files with complete frontmatter.
+            Add new entries in content/tools, content/workflows, or content/dotfiles as MDX files
+            with complete frontmatter.
           </p>
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
             Run <strong>npm run validate:content</strong> before committing. Contributor templates and
@@ -58,6 +69,9 @@ export default function ResourcesPage() {
             </Link>
             <Link href="/workflows" className="border border-gray-300 px-3 py-2 no-underline hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950">
               Browse workflows
+            </Link>
+            <Link href="/dotfiles" className="border border-gray-300 px-3 py-2 no-underline hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-950">
+              Browse dotfiles
             </Link>
           </div>
         </section>

@@ -1,0 +1,60 @@
+---
+title: Multi-Tenant Dashboard MVP Case Study
+slug: multi-tenant-dashboard-mvp-case-study
+description: Deliver a multi-tenant analytics dashboard MVP with role boundaries and fast iteration loops.
+author: Manav Arya Singh
+complexity: Advanced
+toolsUsed: [claude-code, cursor, github-copilot, warp, openrouter]
+dateAdded: 2026-04-05
+---
+
+## Context
+A startup needed a dashboard MVP for agencies and clients with isolated workspaces, permissions, and reporting modules.
+
+<WorkflowGraph
+  height={430}
+  nodes={[
+    { id: "1", data: { label: "Requirements Mapping" }, position: { x: 0, y: 130 } },
+    { id: "2", data: { label: "Tenant Model" }, position: { x: 220, y: 50 } },
+    { id: "3", data: { label: "Auth + Roles" }, position: { x: 220, y: 210 } },
+    { id: "4", data: { label: "Data Access Layer" }, position: { x: 470, y: 130 } },
+    { id: "5", data: { label: "Module Scaffolding" }, position: { x: 700, y: 40 } },
+    { id: "6", data: { label: "UI Integration" }, position: { x: 700, y: 220 } },
+    { id: "7", data: { label: "Permission Testing" }, position: { x: 930, y: 40 } },
+    { id: "8", data: { label: "Perf + Query Audit" }, position: { x: 930, y: 220 } },
+    { id: "9", data: { label: "Pilot Release" }, position: { x: 1160, y: 130 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+    { id: "e2-4", source: "2", target: "4" },
+    { id: "e3-4", source: "3", target: "4" },
+    { id: "e4-5", source: "4", target: "5" },
+    { id: "e4-6", source: "4", target: "6" },
+    { id: "e5-7", source: "5", target: "7" },
+    { id: "e6-8", source: "6", target: "8" },
+    { id: "e7-9", source: "7", target: "9" },
+    { id: "e8-9", source: "8", target: "9" },
+    { id: "e7-3", source: "7", target: "3", animated: true, label: "role fix loop" },
+    { id: "e8-4", source: "8", target: "4", animated: true, label: "query tuning" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Architecture First">
+Use <ToolLink slug="claude-code" /> to define tenant boundaries, role matrix, and data partition strategy before UI work.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Implement by Vertical Slices">
+For each module, build API + permissions + UI together with <ToolLink slug="cursor" /> and <ToolLink slug="github-copilot" />.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Stress and Validate">
+Run permission simulation and query profiling with <ToolLink slug="warp" /> command sets and route deeper analysis via <ToolLink slug="openrouter" />.
+
+<PromptBlock agent="security-review">
+Review this dashboard access model. Identify privilege escalation risks and missing enforcement points.
+</PromptBlock>
+</WorkflowStep>
+
+## Outcome
+The team shipped an MVP to pilot customers with clear tenant isolation and measurable performance baselines.

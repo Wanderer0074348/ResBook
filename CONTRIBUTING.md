@@ -4,7 +4,7 @@ Thanks for helping improve ResBook.
 
 ## Quick Workflow
 
-1. Add or update MDX files in `content/tools` or `content/workflows`.
+1. Add or update MDX files in `content/tools`, `content/workflows`, or `content/dotfiles`.
 2. Run content checks:
 
 ```bash
@@ -89,10 +89,54 @@ How to verify success.
 - Frontmatter fields are required.
 - Slug must match filename.
 - Slugs must be unique per section.
+- Every `toolsUsed` entry in workflows/dotfiles must match an existing slug in `content/tools`.
 - Enum values must match allowed options:
   - Tool category: `LLM`, `Agent`, `IDE`, `CLI`
   - Tool pricing: `Free`, `Freemium`, `Paid`
   - Workflow complexity: `Beginner`, `Intermediate`, `Advanced`
+  - Dotfile kind: `Prompt Pack`, `Config`, `Template`
+
+## Dotfile Entry Template
+
+Create `content/dotfiles/your-dotfile-slug.mdx`:
+
+```mdx
+---
+title: Dotfile Name
+slug: your-dotfile-slug
+description: One-line practical summary.
+author: Your Name
+kind: Prompt Pack
+toolsUsed: [tool-slug-1, tool-slug-2]
+dateAdded: 2026-04-05
+---
+
+## Overview
+What this dotfile package solves.
+
+## Contents
+- Prompt packs, config snippets, or templates included.
+
+## How To Use
+Step-by-step integration guidance.
+```
+
+## Workflow Graphs (React Flow)
+
+You can add a graph to workflow or dotfile content using `WorkflowGraph`:
+
+```mdx
+<WorkflowGraph
+  height={340}
+  nodes={[
+    { id: "1", data: { label: "Scope" }, position: { x: 0, y: 80 } },
+    { id: "2", data: { label: "Build" }, position: { x: 220, y: 80 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" }
+  ]}
+/>
+```
 
 ## Review Quality Guidelines
 

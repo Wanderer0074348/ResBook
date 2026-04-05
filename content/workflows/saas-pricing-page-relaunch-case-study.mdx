@@ -1,0 +1,57 @@
+---
+title: SaaS Pricing Page Relaunch Case Study
+slug: saas-pricing-page-relaunch-case-study
+description: Rebuild a pricing page with clearer positioning, plan architecture, and conversion instrumentation.
+author: Manav Arya Singh
+complexity: Intermediate
+toolsUsed: [perplexity, v0, cursor, claude-code, openrouter]
+dateAdded: 2026-04-05
+---
+
+## Context
+A B2B SaaS team had strong traffic but weak plan clarity and low trial conversion from the pricing page.
+
+<WorkflowGraph
+  height={420}
+  nodes={[
+    { id: "1", data: { label: "Traffic + Funnel Audit" }, position: { x: 0, y: 100 } },
+    { id: "2", data: { label: "ICP Segmentation" }, position: { x: 220, y: 40 } },
+    { id: "3", data: { label: "Message Architecture" }, position: { x: 220, y: 170 } },
+    { id: "4", data: { label: "Layout Prototypes" }, position: { x: 460, y: 100 } },
+    { id: "5", data: { label: "Implementation" }, position: { x: 680, y: 100 } },
+    { id: "6", data: { label: "A/B Instrumentation" }, position: { x: 900, y: 40 } },
+    { id: "7", data: { label: "QA + Accessibility" }, position: { x: 900, y: 170 } },
+    { id: "8", data: { label: "Release + Learnings" }, position: { x: 1130, y: 100 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+    { id: "e2-4", source: "2", target: "4" },
+    { id: "e3-4", source: "3", target: "4" },
+    { id: "e4-5", source: "4", target: "5" },
+    { id: "e5-6", source: "5", target: "6", label: "tracking" },
+    { id: "e5-7", source: "5", target: "7", label: "quality" },
+    { id: "e6-8", source: "6", target: "8" },
+    { id: "e7-8", source: "7", target: "8" },
+    { id: "e7-4", source: "7", target: "4", animated: true, label: "copy/layout iterate" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Audit and Segment">
+Use <ToolLink slug="perplexity" /> for competitor benchmark snapshots and cluster audience needs by ICP.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Design and Message Prototypes">
+Generate section variants with <ToolLink slug="v0" /> and refine copy + pricing logic with <ToolLink slug="openrouter" /> model routing.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Implement and Instrument">
+Ship with <ToolLink slug="cursor" /> + <ToolLink slug="claude-code" />, then add event tracking for plan clicks, FAQ interactions, and CTA progression.
+
+<PromptBlock agent="experiment-designer">
+Create an A/B test matrix for pricing page variants. Include hypothesis, KPI, event names, and minimum sample assumptions.
+</PromptBlock>
+</WorkflowStep>
+
+## Outcome
+Trial start rate improved after reducing plan confusion and introducing focused enterprise CTA paths.

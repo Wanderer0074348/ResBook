@@ -1,0 +1,59 @@
+---
+title: Community Platform Launch Case Study
+slug: community-platform-launch-case-study
+description: Build and launch a community web app with onboarding funnels, moderation tooling, and growth loops.
+author: Manav Arya Singh
+complexity: Intermediate
+toolsUsed: [lovable, claude-code, cursor, n8n, perplexity]
+dateAdded: 2026-04-05
+---
+
+## Context
+A creator-led brand wanted a community platform with profile onboarding, discussions, and automated moderation workflows.
+
+<WorkflowGraph
+  height={430}
+  nodes={[
+    { id: "1", data: { label: "Community Goals" }, position: { x: 0, y: 120 } },
+    { id: "2", data: { label: "MVP Feature Stack" }, position: { x: 220, y: 40 } },
+    { id: "3", data: { label: "Onboarding Journey" }, position: { x: 220, y: 200 } },
+    { id: "4", data: { label: "App Prototype" }, position: { x: 460, y: 120 } },
+    { id: "5", data: { label: "Core Build" }, position: { x: 700, y: 40 } },
+    { id: "6", data: { label: "Automation + Moderation" }, position: { x: 700, y: 200 } },
+    { id: "7", data: { label: "Pilot Cohort" }, position: { x: 950, y: 40 } },
+    { id: "8", data: { label: "Growth Feedback" }, position: { x: 950, y: 200 } },
+    { id: "9", data: { label: "Public Launch" }, position: { x: 1180, y: 120 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+    { id: "e2-4", source: "2", target: "4" },
+    { id: "e3-4", source: "3", target: "4" },
+    { id: "e4-5", source: "4", target: "5" },
+    { id: "e4-6", source: "4", target: "6" },
+    { id: "e5-7", source: "5", target: "7" },
+    { id: "e6-7", source: "6", target: "7", label: "automation ready" },
+    { id: "e7-8", source: "7", target: "8" },
+    { id: "e8-9", source: "8", target: "9" },
+    { id: "e8-3", source: "8", target: "3", animated: true, label: "onboarding tune" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Prototype Fast">
+Use <ToolLink slug="lovable" /> to shape the first functional prototype and gather internal feedback.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Build + Automate">
+Use <ToolLink slug="claude-code" /> + <ToolLink slug="cursor" /> for implementation, then add lifecycle automations with <ToolLink slug="n8n" />.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Pilot and Iterate">
+Use <ToolLink slug="perplexity" /> for benchmark ideas and run a controlled pilot before broad launch.
+
+<PromptBlock agent="community-ops">
+Create a moderation policy starter and escalation workflow for a new creator community platform.
+</PromptBlock>
+</WorkflowStep>
+
+## Outcome
+The team launched with a healthier onboarding completion rate and clearer moderation operations from day one.

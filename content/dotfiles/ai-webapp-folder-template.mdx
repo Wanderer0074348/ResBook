@@ -1,0 +1,39 @@
+---
+title: AI Webapp Folder Template
+slug: ai-webapp-folder-template
+description: Reusable project skeleton for shipping AI-enabled web applications quickly.
+author: Manav Arya Singh
+kind: Template
+toolsUsed: [cursor, v0, github-copilot]
+dateAdded: 2026-04-05
+---
+
+## Overview
+This template standardizes app structure so feature work does not stall on folder decisions.
+
+## Recommended Structure
+```txt
+app/
+components/
+content/
+lib/
+scripts/
+tests/
+```
+
+## Rules
+- Keep product logic in `lib/`.
+- Keep page-level composition in `app/`.
+- Keep reusable UI in `components/`.
+- Keep quality gates in `scripts/` and `tests/`.
+
+## Setup Checklist
+1. Add SEO defaults in root layout metadata.
+2. Add content validation script early.
+3. Add at least one list page and one dynamic detail page.
+4. Add tests for filtering/searching behavior before scaling content.
+
+## Tool Pairings
+- <ToolLink slug="v0" /> for fast UI exploration.
+- <ToolLink slug="cursor" /> for implementation iteration.
+- <ToolLink slug="github-copilot" /> for repetitive scaffolding.

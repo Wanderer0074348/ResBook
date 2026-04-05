@@ -12,7 +12,7 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "ResBook | AI Tools & Workflows Directory",
+    default: "ResBook | AI Tools, Workflows, and Dotfiles",
     template: "%s",
   },
   description: siteConfig.description,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "ResBook | AI Tools & Workflows Directory",
+    title: "ResBook | AI Tools, Workflows, and Dotfiles",
     description: siteConfig.description,
     url: "/",
     siteName: siteConfig.name,
@@ -30,13 +30,13 @@ export const metadata: Metadata = {
         url: siteConfig.defaultOgPath,
         width: 1200,
         height: 630,
-        alt: "ResBook - AI Tools & Workflows Directory",
+        alt: "ResBook - AI Tools, Workflows, and Dotfiles",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ResBook | AI Tools & Workflows Directory",
+    title: "ResBook | AI Tools, Workflows, and Dotfiles",
     description: siteConfig.description,
     images: [siteConfig.defaultOgPath],
   },

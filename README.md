@@ -1,6 +1,6 @@
 # ResBook
 
-A markdown-driven directory for AI tools, agentic workflows, and developer tips. Built with Next.js, React, and Tailwind CSS 4.0.
+A markdown-driven directory for AI tools, agentic workflows, dotfiles, and developer tips. Built with Next.js, React, and Tailwind CSS 4.0.
 
 ## Features
 
@@ -10,8 +10,9 @@ A markdown-driven directory for AI tools, agentic workflows, and developer tips.
   - `<WorkflowStep>`: Create step-by-step workflow guides
   - `<PromptBlock>`: Display AI prompts with agent labels
   - `<ToolLink>`: Internal links to other tools
+  - `<WorkflowGraph>`: Render interactive flow diagrams for workflows and dotfiles
 - **Static Site Generation**: Pre-rendered pages for optimal performance
-- **Search**: Client-side search across tools and workflows
+- **Search**: Client-side search across tools, workflows, and dotfiles
 - **Monospace Typography**: Terminal-inspired aesthetic with strict grayscale
 - **Dark Mode**: Full dark mode support
 
@@ -64,6 +65,23 @@ Content for step 1
 </WorkflowStep>
 ```
 
+### New Dotfile (content/dotfiles/my-dotfile.mdx)
+
+```mdx
+---
+title: Dotfile Name
+slug: my-dotfile
+description: Brief description
+author: Your Name
+kind: Prompt Pack | Config | Template
+toolsUsed: [tool-slug-1]
+dateAdded: 2026-04-05
+---
+
+## Overview
+Content here...
+```
+
 ## Tech Stack
 
 - Next.js 16 (App Router)
@@ -82,7 +100,8 @@ resbook/
 │   └── mdx/               # Verdict, WorkflowStep, etc.
 ├── content/               # Markdown files
 │   ├── tools/
-│   └── workflows/
+│   ├── workflows/
+│   └── dotfiles/
 └── lib/                   # Utilities and types
 ```
 

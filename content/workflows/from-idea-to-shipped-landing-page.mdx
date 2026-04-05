@@ -1,0 +1,52 @@
+---
+title: From Idea to Shipped Landing Page
+slug: from-idea-to-shipped-landing-page
+description: Validate a product idea and ship a polished landing page in one focused sprint.
+author: Manav Arya Singh
+complexity: Beginner
+toolsUsed: [v0, cursor, claude-code, github-copilot]
+dateAdded: 2026-04-05
+---
+
+## Goal
+Go from rough product concept to a production landing page with clear positioning and CTA flow.
+
+<WorkflowGraph
+  height={340}
+  nodes={[
+    { id: "1", data: { label: "Idea + ICP" }, position: { x: 0, y: 90 } },
+    { id: "2", data: { label: "Messaging Draft" }, position: { x: 190, y: 90 } },
+    { id: "3", data: { label: "UI Generation" }, position: { x: 380, y: 90 } },
+    { id: "4", data: { label: "Code Polish" }, position: { x: 570, y: 90 } },
+    { id: "5", data: { label: "Deploy + QA" }, position: { x: 760, y: 90 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e2-3", source: "2", target: "3" },
+    { id: "e3-4", source: "3", target: "4" },
+    { id: "e4-5", source: "4", target: "5" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Define ICP and Core Promise">
+Write a one-line promise for your target user and 3 pain points you solve.
+
+<PromptBlock agent="strategy">
+Given this product concept, draft ICP, top pains, desired outcome, and one crisp value proposition.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Generate Initial UI">
+Use <ToolLink slug="v0" /> to create an initial hero, features, and CTA layout.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Refine Copy and Structure">
+Use <ToolLink slug="claude-code" /> and <ToolLink slug="cursor" /> to improve section order, scannability, and conversion clarity.
+</WorkflowStep>
+
+<WorkflowStep step={4} title="Ship and Verify">
+Run mobile QA, verify metadata/social cards, and deploy.
+</WorkflowStep>
+
+## Expected Output
+A clean landing page with coherent messaging and deployment-ready code.

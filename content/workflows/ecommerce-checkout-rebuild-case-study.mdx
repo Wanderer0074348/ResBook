@@ -1,0 +1,59 @@
+---
+title: Ecommerce Checkout Rebuild Case Study
+slug: ecommerce-checkout-rebuild-case-study
+description: Re-architect a checkout flow to reduce drop-off while preserving reliability and observability.
+author: Manav Arya Singh
+complexity: Advanced
+toolsUsed: [chatgpt, openrouter, cursor, claude-code, github-copilot]
+dateAdded: 2026-04-05
+---
+
+## Context
+A D2C team saw high cart intent but severe abandonment at shipping and payment steps.
+
+<WorkflowGraph
+  height={430}
+  nodes={[
+    { id: "1", data: { label: "Drop-off Analysis" }, position: { x: 0, y: 120 } },
+    { id: "2", data: { label: "UX Friction Map" }, position: { x: 220, y: 40 } },
+    { id: "3", data: { label: "Failure Logs" }, position: { x: 220, y: 200 } },
+    { id: "4", data: { label: "Checkout Architecture" }, position: { x: 460, y: 120 } },
+    { id: "5", data: { label: "Form + Payment Refactor" }, position: { x: 700, y: 40 } },
+    { id: "6", data: { label: "State Recovery + Retries" }, position: { x: 700, y: 200 } },
+    { id: "7", data: { label: "Experiment Cohorts" }, position: { x: 950, y: 40 } },
+    { id: "8", data: { label: "Guardrail Monitoring" }, position: { x: 950, y: 200 } },
+    { id: "9", data: { label: "Rollout" }, position: { x: 1180, y: 120 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+    { id: "e2-4", source: "2", target: "4" },
+    { id: "e3-4", source: "3", target: "4" },
+    { id: "e4-5", source: "4", target: "5" },
+    { id: "e4-6", source: "4", target: "6" },
+    { id: "e5-7", source: "5", target: "7" },
+    { id: "e6-8", source: "6", target: "8" },
+    { id: "e7-9", source: "7", target: "9" },
+    { id: "e8-9", source: "8", target: "9" },
+    { id: "e8-6", source: "8", target: "6", animated: true, label: "failure loop" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Diagnose Before Building">
+Synthesize quantitative and qualitative friction with <ToolLink slug="chatgpt" /> and scenario testing.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Rebuild Critical Paths">
+Implement segmented checkout stages and durable state handling using <ToolLink slug="cursor" /> + <ToolLink slug="claude-code" />.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Launch with Guardrails">
+Use <ToolLink slug="openrouter" /> to compare message strategies for error states, then instrument post-launch metrics.
+
+<PromptBlock agent="checkout-analyst">
+Generate a checkout risk register with probable failure points, observability events, and rollback triggers.
+</PromptBlock>
+</WorkflowStep>
+
+## Outcome
+Checkout completion improved after simplifying flow order and making recovery from transient payment failures explicit.

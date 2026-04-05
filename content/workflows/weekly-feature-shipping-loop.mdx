@@ -1,0 +1,39 @@
+---
+title: Weekly Feature Shipping Loop
+slug: weekly-feature-shipping-loop
+description: Repeatable weekly cycle to scope, build, test, and release one meaningful feature.
+author: Manav Arya Singh
+complexity: Intermediate
+toolsUsed: [claude-code, cursor, github-copilot, warp]
+dateAdded: 2026-04-05
+---
+
+## Goal
+Ship one high-impact feature every week with predictable quality.
+
+<WorkflowStep step={1} title="Monday: Scope and Acceptance Criteria">
+Define the feature boundary, edge cases, and success criteria.
+
+<PromptBlock agent="planner">
+Create a 5-day implementation plan with explicit acceptance criteria and test checkpoints.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Tuesday-Wednesday: Implement in Slices">
+Use <ToolLink slug="claude-code" /> and <ToolLink slug="github-copilot" /> for slice-by-slice implementation.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Thursday: Harden and Test">
+Run full checks and fix regressions.
+
+<PromptBlock agent="reviewer">
+Review this diff for regressions, missing tests, and edge-case failures. Output findings by severity.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={4} title="Friday: Release and Notes">
+Deploy, document the release, and collect user feedback signals for next week.
+</WorkflowStep>
+
+## Expected Output
+A feature shipped with test coverage, release notes, and a feedback backlog for iteration.

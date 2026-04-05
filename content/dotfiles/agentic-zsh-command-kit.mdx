@@ -1,0 +1,31 @@
+---
+title: Agentic Zsh Command Kit
+slug: agentic-zsh-command-kit
+description: Shell alias and command conventions for safer AI-assisted coding sessions.
+author: Manav Arya Singh
+kind: Config
+toolsUsed: [claude-code, aider]
+dateAdded: 2026-04-05
+---
+
+## Overview
+This config set focuses on safe defaults, short feedback loops, and repeatable quality checks while working with coding agents.
+
+## Alias Examples
+```sh
+alias qc='npm run validate:content && npm run lint && npm run test'
+alias gs='git status -sb'
+alias gd='git --no-pager diff'
+```
+
+## Session Rules
+- Never run destructive git commands without explicit approval.
+- Prefer narrow, focused diffs over large rewrites.
+- Validate after every meaningful change set.
+
+## Tool Pairings
+- <ToolLink slug="claude-code" /> for orchestrating multi-step edits.
+- <ToolLink slug="aider" /> for quick patch-based file updates.
+
+## Maintenance Notes
+Rotate aliases as repository scripts evolve so local shortcuts mirror CI gates.

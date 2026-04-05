@@ -1,0 +1,33 @@
+---
+title: Next.js Ship Checklist Template
+slug: nextjs-ship-checklist-template
+description: Pre-release checklist for AI-heavy Next.js projects with content and metadata surfaces.
+author: Manav Arya Singh
+kind: Template
+toolsUsed: [claude-code, cursor, github-copilot]
+dateAdded: 2026-04-05
+---
+
+## Overview
+Use this checklist before every release to prevent avoidable regressions.
+
+## Checklist
+- Validate frontmatter for all content sections.
+- Run lint and unit tests.
+- Verify dynamic pages have static params where needed.
+- Check metadata, sitemap, and robots outputs.
+- Test mobile navigation and search behavior.
+
+## Release Prompt
+
+<PromptBlock agent="release-checker">
+Run a release readiness review on this repo. Report blockers, medium-risk issues, and optional improvements separately.
+</PromptBlock>
+
+## Tool Pairings
+- <ToolLink slug="claude-code" /> for orchestration and review loops.
+- <ToolLink slug="cursor" /> for targeted patching.
+- <ToolLink slug="github-copilot" /> for finishing repetitive cleanup work.
+
+## Notes
+Keep the checklist short enough to run in under 15 minutes.

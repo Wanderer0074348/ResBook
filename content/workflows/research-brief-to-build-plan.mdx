@@ -1,0 +1,31 @@
+---
+title: Research Brief to Build Plan
+slug: research-brief-to-build-plan
+description: Convert scattered AI/product research into an actionable technical build plan in one session.
+author: Manav Arya Singh
+complexity: Beginner
+toolsUsed: [perplexity, notebooklm, openrouter, claude-code]
+dateAdded: 2026-04-05
+---
+
+## Goal
+Turn broad research into a concrete roadmap with milestones and implementation tasks.
+
+<WorkflowStep step={1} title="Source Collection">
+Gather high-quality references using <ToolLink slug="perplexity" /> and save them into one brief.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Theme Extraction">
+Use <ToolLink slug="notebooklm" /> to cluster sources into themes, assumptions, and unknowns.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Plan Generation">
+Use <ToolLink slug="claude-code" /> with model routing from <ToolLink slug="openrouter" /> to generate a phased implementation plan.
+
+<PromptBlock agent="planner">
+Generate a goal-backward implementation plan from this research brief. Include milestones, dependencies, risks, and validation criteria.
+</PromptBlock>
+</WorkflowStep>
+
+## Expected Output
+A build-ready plan document that engineering can execute without additional discovery meetings.

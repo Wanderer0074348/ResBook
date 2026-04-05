@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchClient } from "@/components/SearchClient";
-import { getTools, getWorkflows } from "@/lib/mdx";
+import { getDotfiles, getTools, getWorkflows } from "@/lib/mdx";
 
 export const metadata: Metadata = {
   title: "Search | ResBook",
-  description: "Search across tool reviews and workflow guides.",
+  description: "Search across tool reviews, workflow guides, and dotfiles.",
 };
 
 export default async function SearchPage() {
-  const [toolsData, workflowsData] = await Promise.all([getTools(), getWorkflows()]);
+  const [toolsData, workflowsData, dotfilesData] = await Promise.all([
+    getTools(),
+    getWorkflows(),
+    getDotfiles(),
+  ]);
 
   const tools = toolsData.map((tool) => tool.frontmatter);
   const workflows = workflowsData.map((workflow) => workflow.frontmatter);
+  const dotfiles = dotfilesData.map((dotfile) => dotfile.frontmatter);
 
   return (
     <div className="min-h-screen border-l border-gray-300 dark:border-gray-700">
@@ -28,11 +33,11 @@ export default async function SearchPage() {
         <div className="mb-10">
           <h1 className="text-5xl font-bold mb-4">Search</h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Find tools and workflows by title or description.
+            Find tools, workflows, and dotfiles by title or description.
           </p>
         </div>
 
-        <SearchClient initialTools={tools} initialWorkflows={workflows} />
+        <SearchClient initialTools={tools} initialWorkflows={workflows} initialDotfiles={dotfiles} />
       </div>
     </div>
   );

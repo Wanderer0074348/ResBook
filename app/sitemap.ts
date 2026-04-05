@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getAllToolSlugs, getAllWorkflowSlugs } from "@/lib/mdx";
+import { getAllDotfileSlugs, getAllToolSlugs, getAllWorkflowSlugs } from "@/lib/mdx";
 import { getSiteUrl } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [toolSlugs, workflowSlugs] = await Promise.all([
+  const [toolSlugs, workflowSlugs, dotfileSlugs] = await Promise.all([
     getAllToolSlugs(),
     getAllWorkflowSlugs(),
+    getAllDotfileSlugs(),
   ]);
   const baseUrl = getSiteUrl();
 
@@ -15,6 +16,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/tools",
     "/workflows",
+    "/dotfiles",
+    "/compare",
+    "/collections",
     "/search",
     "/resources",
     "/llms.txt",
@@ -33,5 +37,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
   }));
 
-  return [...staticRoutes, ...toolRoutes, ...workflowRoutes];
+  const dotfileRoutes: MetadataRoute.Sitemap = dotfileSlugs.map((slug) => ({
+    url: `${baseUrl}/dotfiles/${slug}`,
+    lastModified: now,
+  }));
+
+  return [...staticRoutes, ...toolRoutes, ...workflowRoutes, ...dotfileRoutes];
 }

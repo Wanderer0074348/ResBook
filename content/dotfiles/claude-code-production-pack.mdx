@@ -1,0 +1,39 @@
+---
+title: Claude Code Production Pack
+slug: claude-code-production-pack
+description: Prompt pack for planning, implementing, and reviewing production-grade feature work.
+author: Manav Arya Singh
+kind: Prompt Pack
+toolsUsed: [claude-code, github-copilot, cursor]
+dateAdded: 2026-04-05
+---
+
+## Overview
+This pack is for high-signal coding sessions where you want predictable outcomes: clear plan, bounded execution, and explicit verification.
+
+## Prompt Set
+
+<PromptBlock agent="planner">
+Write an implementation plan in phases with explicit dependencies, risk flags, and validation steps.
+</PromptBlock>
+
+<PromptBlock agent="executor">
+Implement phase by phase. After each phase run lint, tests, and summarize only the diff-relevant impact.
+</PromptBlock>
+
+<PromptBlock agent="reviewer">
+Review the changes for regressions, edge-case gaps, and missing test coverage. Report findings by severity.
+</PromptBlock>
+
+## How To Use
+1. Start with planning prompt and freeze scope.
+2. Execute in small commits with validation after each checkpoint.
+3. Run reviewer prompt before merge.
+
+## Tool Pairings
+- <ToolLink slug="claude-code" /> for long-horizon execution.
+- <ToolLink slug="github-copilot" /> for in-editor implementation speed.
+- <ToolLink slug="cursor" /> for quick multi-file refactors.
+
+## Maintenance Notes
+Refresh these prompts every two weeks as your project constraints change.

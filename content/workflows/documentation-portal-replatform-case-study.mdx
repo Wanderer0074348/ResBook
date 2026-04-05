@@ -1,0 +1,59 @@
+---
+title: Documentation Portal Replatform Case Study
+slug: documentation-portal-replatform-case-study
+description: Migrate fragmented docs into a fast, searchable portal with structured navigation and editorial workflow.
+author: Manav Arya Singh
+complexity: Intermediate
+toolsUsed: [notebooklm, perplexity, claude-code, github-copilot, cursor]
+dateAdded: 2026-04-05
+---
+
+## Context
+A product company maintained docs across multiple tools, causing stale guidance and weak search discoverability.
+
+<WorkflowGraph
+  height={420}
+  nodes={[
+    { id: "1", data: { label: "Inventory Existing Docs" }, position: { x: 0, y: 120 } },
+    { id: "2", data: { label: "Topic Clustering" }, position: { x: 220, y: 40 } },
+    { id: "3", data: { label: "Search Gap Analysis" }, position: { x: 220, y: 200 } },
+    { id: "4", data: { label: "Information Architecture" }, position: { x: 470, y: 120 } },
+    { id: "5", data: { label: "Migration Scripts" }, position: { x: 710, y: 40 } },
+    { id: "6", data: { label: "Rendering + Components" }, position: { x: 710, y: 200 } },
+    { id: "7", data: { label: "Editorial QA" }, position: { x: 960, y: 40 } },
+    { id: "8", data: { label: "Search Relevance Tuning" }, position: { x: 960, y: 200 } },
+    { id: "9", data: { label: "Unified Portal Launch" }, position: { x: 1190, y: 120 } }
+  ]}
+  edges={[
+    { id: "e1-2", source: "1", target: "2" },
+    { id: "e1-3", source: "1", target: "3" },
+    { id: "e2-4", source: "2", target: "4" },
+    { id: "e3-4", source: "3", target: "4" },
+    { id: "e4-5", source: "4", target: "5" },
+    { id: "e4-6", source: "4", target: "6" },
+    { id: "e5-7", source: "5", target: "7" },
+    { id: "e6-8", source: "6", target: "8" },
+    { id: "e7-9", source: "7", target: "9" },
+    { id: "e8-9", source: "8", target: "9" },
+    { id: "e7-2", source: "7", target: "2", animated: true, label: "taxonomy refine" }
+  ]}
+/>
+
+<WorkflowStep step={1} title="Map and Cluster">
+Use <ToolLink slug="notebooklm" /> to cluster existing docs into topic groups and identify overlap.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Design Portal Structure">
+Use competitor research via <ToolLink slug="perplexity" /> and implement IA and navigation patterns with <ToolLink slug="claude-code" />.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Migrate and Tune">
+Migrate content programmatically and tune search relevance with <ToolLink slug="cursor" /> + <ToolLink slug="github-copilot" />.
+
+<PromptBlock agent="docs-editor">
+Audit this migrated doc set for ambiguity, missing prerequisites, and unclear troubleshooting steps.
+</PromptBlock>
+</WorkflowStep>
+
+## Outcome
+Support tickets dropped as users found accurate docs faster and navigation became task-oriented.

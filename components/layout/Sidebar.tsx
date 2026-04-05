@@ -110,7 +110,7 @@ export function Sidebar() {
             resbook
           </Link>
           <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-            AI Tools & Workflows
+            AI Tools, Workflows, Dotfiles
           </p>
         </div>
 
