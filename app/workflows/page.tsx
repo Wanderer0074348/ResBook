@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getWorkflows } from "@/lib/mdx";
+import { WorkflowsExplorer } from "@/components/listing/WorkflowsExplorer";
 
 export const metadata: Metadata = {
   title: "Workflows | ResBook",
@@ -32,33 +33,7 @@ export default async function WorkflowsPage() {
         {workflows.length === 0 ? (
           <p className="text-gray-600 dark:text-gray-400">No workflows published yet.</p>
         ) : (
-          <div className="space-y-4">
-            {workflows.map((workflow) => (
-              <Link
-                key={workflow.slug}
-                href={`/workflows/${workflow.slug}`}
-                className="block border border-gray-300 p-4 hover:bg-gray-50 transition-colors no-underline dark:border-gray-700 dark:hover:bg-gray-950"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="font-bold text-black dark:text-white mb-1">{workflow.title}</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{workflow.description}</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-500">
-                      by <span className="font-bold">{workflow.author}</span>
-                    </p>
-                    {workflow.toolsUsed.length > 0 && (
-                      <p className="mt-2 text-xs text-gray-600 dark:text-gray-500">
-                        tools: {workflow.toolsUsed.join(", ")}
-                      </p>
-                    )}
-                  </div>
-                  <span className="text-xs border border-gray-300 px-2 py-1 whitespace-nowrap dark:border-gray-700">
-                    {workflow.complexity}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <WorkflowsExplorer workflows={workflows} />
         )}
       </div>
     </div>

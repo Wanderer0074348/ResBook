@@ -1,0 +1,37 @@
+---
+title: Automate Support Triage with Agents
+slug: automate-support-triage
+description: Build an agent-assisted triage pipeline for incoming support requests with routing and escalation rules.
+author: ResBook Team
+complexity: Advanced
+toolsUsed: [n8n, chatgpt, langgraph]
+dateAdded: 2026-04-05
+---
+
+## Goal
+
+Reduce manual support load by auto-classifying and routing incoming tickets with guardrails.
+
+<WorkflowStep step={1} title="Design Triage Taxonomy">
+Define categories, priority levels, and escalation conditions for your support queue.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Orchestrate Pipeline in n8n">
+Use n8n to ingest tickets, call LLM classification steps, and route results to team channels.
+
+<PromptBlock agent="USER">
+Classify this support request into category, urgency, and recommended owner. Return strict JSON.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Add Stateful Guardrails">
+Use LangGraph for multi-step validation when confidence is low and force human review for risky categories.
+</WorkflowStep>
+
+<WorkflowStep step={4} title="Measure and Improve">
+Track misroutes weekly and tune prompts/rules until triage accuracy reaches your target threshold.
+</WorkflowStep>
+
+## Expected Output
+
+A repeatable triage pipeline that handles common tickets automatically and escalates sensitive cases safely.

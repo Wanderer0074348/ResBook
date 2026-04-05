@@ -1,0 +1,37 @@
+---
+title: Weekly AI Research Digest
+slug: weekly-ai-research-digest
+description: Build a reliable weekly digest by combining source-backed search, summarization, and editorial polish.
+author: ResBook Team
+complexity: Beginner
+toolsUsed: [perplexity, chatgpt]
+dateAdded: 2026-04-05
+---
+
+## Goal
+
+Produce a concise weekly digest of AI trends with source references and clear action points.
+
+<WorkflowStep step={1} title="Collect Source Material">
+Use Perplexity to gather 10 to 15 source-backed links across product launches, benchmarks, and policy updates.
+
+<PromptBlock agent="USER">
+Find the most important AI updates this week across tooling, model releases, and developer workflows. Include credible source links.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Cluster and Summarize">
+Use ChatGPT to cluster findings into themes and create one-paragraph summaries per theme.
+
+<PromptBlock agent="USER">
+Group these updates into 4 themes and summarize each in under 100 words. Include why each theme matters this month.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Draft Publication Copy">
+Generate a final digest with intro, theme sections, and a short "what to watch next" ending.
+</WorkflowStep>
+
+## Expected Output
+
+A polished digest ready for LUG channels, newsletter, or social posting in under 60 minutes.

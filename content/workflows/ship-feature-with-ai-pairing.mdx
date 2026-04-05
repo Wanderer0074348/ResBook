@@ -1,0 +1,37 @@
+---
+title: Ship a Feature with AI Pairing
+slug: ship-feature-with-ai-pairing
+description: Use AI pairing across planning, implementation, and verification to ship a scoped feature faster.
+author: ResBook Team
+complexity: Intermediate
+toolsUsed: [cursor, github-copilot, claude-code]
+dateAdded: 2026-04-05
+---
+
+## Goal
+
+Ship a user-facing feature from idea to merge while maintaining review quality.
+
+<WorkflowStep step={1} title="Define Scope and Acceptance Criteria">
+Use Claude Code to convert a feature request into a concrete implementation checklist with edge cases.
+
+<PromptBlock agent="USER">
+Break this feature into implementation tasks with acceptance criteria and likely failure cases. Keep tasks independently testable.
+</PromptBlock>
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Implement with IDE Pairing">
+Use Cursor and Copilot for component scaffolding, refactors, and repetitive test setup.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="Hardening Pass">
+Run lint/build/tests and ask Claude Code for a final risk review focusing on regressions and missing tests.
+
+<PromptBlock agent="USER">
+Review current diff for functional regressions, edge cases, and missing tests. Prioritize findings by severity.
+</PromptBlock>
+</WorkflowStep>
+
+## Expected Output
+
+A merge-ready PR with clear acceptance coverage, validated checks, and lower review back-and-forth.
