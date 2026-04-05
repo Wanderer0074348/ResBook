@@ -1,0 +1,33 @@
+---
+title: Open Source PR Accelerator
+slug: open-source-pr-accelerator
+description: Move from issue discovery to merged PR faster with AI-assisted understanding, implementation, and review prep.
+author: ResBook Team
+complexity: Intermediate
+toolsUsed: [aider, github-copilot, chatgpt]
+dateAdded: 2026-04-05
+---
+
+## Goal
+
+Submit higher-quality open source pull requests with less friction and clearer maintainer alignment.
+
+<WorkflowStep step={1} title="Issue and Context Mapping">
+Use ChatGPT to summarize issue intent, required behavior, and likely acceptance criteria from thread context.
+</WorkflowStep>
+
+<WorkflowStep step={2} title="Patch Development">
+Use Aider for controlled multi-file patches and Copilot for repetitive test scaffolding.
+</WorkflowStep>
+
+<WorkflowStep step={3} title="PR Hardening">
+Prepare PR description with problem, approach, testing notes, and tradeoffs.
+
+<PromptBlock agent="USER">
+Draft a PR description with: problem statement, implementation summary, testing steps, and risk notes.
+</PromptBlock>
+</WorkflowStep>
+
+## Expected Output
+
+A cleaner PR that is easier to review, merge, and maintain.

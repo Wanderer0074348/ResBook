@@ -63,7 +63,7 @@ export async function getToolBySlug(slug: string): Promise<ToolContent | null> {
       frontmatter: data as ToolFrontmatter,
       content: body,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -78,7 +78,7 @@ export async function getWorkflowBySlug(slug: string): Promise<WorkflowContent |
       frontmatter: data as WorkflowFrontmatter,
       content: body,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -88,7 +88,7 @@ export async function getAllToolSlugs(): Promise<string[]> {
     const toolsDir = path.join(contentDir, "tools");
     const files = await fs.readdir(toolsDir);
     return files.filter((file) => file.endsWith(".mdx")).map((file) => file.replace(".mdx", ""));
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -98,7 +98,7 @@ export async function getAllWorkflowSlugs(): Promise<string[]> {
     const workflowsDir = path.join(contentDir, "workflows");
     const files = await fs.readdir(workflowsDir);
     return files.filter((file) => file.endsWith(".mdx")).map((file) => file.replace(".mdx", ""));
-  } catch (error) {
+  } catch {
     return [];
   }
 }

@@ -93,6 +93,18 @@ bun run build      # Production build
 bun start          # Run production
 ```
 
+## Content Validation
+
+Before publishing or opening a PR, run:
+
+```bash
+npm run validate:content
+npm run lint
+npm run build
+```
+
+See `CONTRIBUTING.md` for templates, rules, and review guidelines.
+
 Deploy to Vercel, Netlify, or any static host.
 
 ---

@@ -32,8 +32,9 @@ export function TableOfContents() {
         };
       }
     );
-
-    setHeadings(headingElements);
+    const rafId = window.requestAnimationFrame(() => {
+      setHeadings(headingElements);
+    });
 
     // Observe active heading
     const observer = new IntersectionObserver(
@@ -52,7 +53,10 @@ export function TableOfContents() {
       if (element) observer.observe(element);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
   }, []);
 
   if (headings.length === 0) {

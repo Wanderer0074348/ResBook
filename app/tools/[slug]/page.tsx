@@ -1,6 +1,9 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { getToolBySlug, getAllToolSlugs, getTools } from "@/lib/mdx";
+import { getSiteUrl, siteConfig } from "@/lib/site";
 import { Verdict } from "@/components/mdx/Verdict";
 import { WorkflowStep } from "@/components/mdx/WorkflowStep";
 import { PromptBlock } from "@/components/mdx/PromptBlock";
@@ -17,6 +20,49 @@ interface ToolPageProps {
 export async function generateStaticParams() {
   const slugs = await getAllToolSlugs();
   return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const tool = await getToolBySlug(slug);
+
+  if (!tool) {
+    return {
+      title: "Tool Not Found | ResBook",
+    };
+  }
+
+  const canonicalUrl = getSiteUrl(`/tools/${slug}`);
+  const title = `${tool.frontmatter.title} | ResBook`;
+
+  return {
+    title,
+    description: tool.frontmatter.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description: tool.frontmatter.description,
+      url: canonicalUrl,
+      type: "article",
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: siteConfig.defaultOgPath,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: tool.frontmatter.description,
+      images: [siteConfig.defaultOgPath],
+    },
+  };
 }
 
 const components = {
@@ -53,13 +99,13 @@ export default async function ToolPage({ params }: ToolPageProps) {
       <div className="max-w-3xl px-8 py-12 ml-0">
         {/* Breadcrumb */}
         <div className="mb-8 text-sm flex items-center gap-2 text-gray-600 dark:text-gray-400">
-          <a href="/" className="hover:text-black dark:hover:text-white">
+          <Link href="/" className="hover:text-black dark:hover:text-white">
             home
-          </a>
+          </Link>
           <span>/</span>
-          <a href="/" className="hover:text-black dark:hover:text-white">
+          <Link href="/tools" className="hover:text-black dark:hover:text-white">
             tools
-          </a>
+          </Link>
           <span>/</span>
           <span className="text-black dark:text-white">{tool.frontmatter.title}</span>
         </div>
