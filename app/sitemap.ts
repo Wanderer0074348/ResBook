@@ -21,6 +21,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/collections",
     "/search",
     "/resources",
+    "/analytics",
+    "/submit",
     "/llms.txt",
   ].map((path) => ({
     url: `${baseUrl}${path}`,

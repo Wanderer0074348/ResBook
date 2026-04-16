@@ -1,30 +1,51 @@
 # ResBook
 
-A markdown-driven directory for AI tools, agentic workflows, dotfiles, and developer tips. Built with Next.js, React, and Tailwind CSS 4.0.
+The AI Ops Manual — A curated, opinionated directory of AI tools, executable workflows, and developer configurations. Built with Next.js, React, and Tailwind CSS.
 
 ## Features
 
-- **Markdown-driven content**: All content is stored as `.mdx` files in `/content`
-- **MDX Components**: Extensible React components for enhanced Markdown:
-  - `<Verdict>`: Display whether a tool is worth using with pricing info
-  - `<WorkflowStep>`: Create step-by-step workflow guides
-  - `<PromptBlock>`: Display AI prompts with agent labels
-  - `<ToolLink>`: Internal links to other tools
-  - `<WorkflowGraph>`: Render interactive flow diagrams for workflows and dotfiles
+### Core
+- **Markdown-driven content**: All content stored as `.mdx` files in `/content`
+- **MDX Components**: `<Verdict>`, `<WorkflowStep>`, `<PromptBlock>`, `<ToolLink>`, `<WorkflowGraph>`
 - **Static Site Generation**: Pre-rendered pages for optimal performance
 - **Search**: Client-side search across tools, workflows, and dotfiles
-- **Monospace Typography**: Terminal-inspired aesthetic with strict grayscale
 - **Dark Mode**: Full dark mode support
+
+### New in v2.0
+
+- **Workflow Runner**: Track workflow step completion with progress bar and localStorage persistence
+- **AI Chat Assistant**: Ask natural language questions like "What tool for code review?"
+- **Personal Stack Builder**: Save tools/workflows and export as Markdown, JSON, or Shell script
+- **Analytics Dashboard**: View content statistics and breakdowns
+- **Community Submissions**: Submit tools/workflows/dotfiles via GitHub issues
+- **Content Status**: Draft, In-Review, Published, Deprecated statuses
+- **Endorsements**: Community voting on tools
 
 ## Quick Start
 
 ```bash
-cd resbook
-bun install
-bun run dev
+npm install
+npm run dev
 ```
 
 Open http://localhost:3000
+
+## New Features
+
+### Workflow Runner
+Click "Run Workflow" on any workflow page to track your progress step-by-step. Progress is saved locally.
+
+### AI Assistant
+On the home page, ask: "What tool for web development?" or "How to build an MVP?"
+
+### Personal Stack
+Add tools and workflows to your personal stack, then export as:
+- Markdown README
+- JSON config
+- Shell installation script
+
+### Submit
+Use `/submit` to contribute new tools, workflows, or dotfiles via GitHub issues.
 
 ## Adding Content
 
@@ -39,6 +60,7 @@ category: LLM | Agent | IDE | CLI
 pricing: Free | Freemium | Paid
 worthIt: true
 dateAdded: 2025-02-20
+status: published
 ---
 
 <Verdict isWorthIt={true} cost="free" />
@@ -58,6 +80,7 @@ author: Your Name
 complexity: Beginner | Intermediate | Advanced
 toolsUsed: [tool-slug-1]
 dateAdded: 2025-02-20
+status: published
 ---
 
 <WorkflowStep step={1} title="Step One">
@@ -65,26 +88,9 @@ Content for step 1
 </WorkflowStep>
 ```
 
-### New Dotfile (content/dotfiles/my-dotfile.mdx)
-
-```mdx
----
-title: Dotfile Name
-slug: my-dotfile
-description: Brief description
-author: Your Name
-kind: Prompt Pack | Config | Template
-toolsUsed: [tool-slug-1]
-dateAdded: 2026-04-05
----
-
-## Overview
-Content here...
-```
-
 ## Tech Stack
 
-- Next.js 16 (App Router)
+- Next.js 15 (App Router)
 - React 19
 - Tailwind CSS v4.0
 - MDX (next-mdx-remote)
@@ -97,7 +103,10 @@ resbook/
 ├── app/                    # Routes
 ├── components/             # React components
 │   ├── layout/            # Navbar, Footer, Container
-│   └── mdx/               # Verdict, WorkflowStep, etc.
+│   ├── mdx/               # Verdict, WorkflowStep, etc.
+│   ├── ai/                # AI Chat Assistant
+│   ├── stack/             # Personal Stack Builder
+│   └── workflows/         # Workflow Runner
 ├── content/               # Markdown files
 │   ├── tools/
 │   ├── workflows/
@@ -108,13 +117,13 @@ resbook/
 ## Build & Deploy
 
 ```bash
-bun run build      # Production build
-bun start          # Run production
+npm run build      # Production build
+npm start          # Run production
 ```
 
 ## Content Validation
 
-Before publishing or opening a PR, run:
+Before publishing or opening a PR:
 
 ```bash
 npm run validate:content
@@ -122,10 +131,10 @@ npm run lint
 npm run build
 ```
 
-See `CONTRIBUTING.md` for templates, rules, and review guidelines.
+See `CONTRIBUTING.md` for templates and review guidelines.
 
 Deploy to Vercel, Netlify, or any static host.
 
 ---
 
-**Terminal-inspired, markdown-powered AI tools & workflows directory.**
+**The AI Ops Manual — Curated tools, executable workflows, and your personal AI stack.**
