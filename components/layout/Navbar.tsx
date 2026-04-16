@@ -31,6 +31,9 @@ export function Navbar() {
             <Link href="/analytics" className="hover:opacity-75">
               analytics
             </Link>
+            <Link href="/submit" className="hover:opacity-75 text-green-600">
+              submit
+            </Link>
           </div>
         </div>
       </Container>
