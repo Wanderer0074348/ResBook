@@ -12,6 +12,7 @@ import { PageNavigation } from "@/components/PageNavigation";
 import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
 import { ReadinessPanel } from "@/components/workflows/ReadinessPanel";
 import { WorkflowRunnerProvider, WorkflowProgressBar } from "@/components/workflows/WorkflowRunner";
+import { ShareButton } from "@/components/ui/ShareButton";
 import type { WorkflowContent, ToolFrontmatter } from "@/lib/types";
 import { getWorkflowReadiness } from "@/lib/workflowReadiness";
 
@@ -140,6 +141,7 @@ export function WorkflowClientContent({
               >
                 {addedToStack ? "✓ Added" : "+ Add to Stack"}
               </button>
+              <ShareButton title={workflow.frontmatter.title} />
             </div>
           </div>
 

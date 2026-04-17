@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { KeyboardShortcuts } from "@/components/ui/KeyboardShortcuts";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
       <body className="min-h-full bg-white text-black font-mono antialiased dark:bg-black dark:text-white">
         <Sidebar />
         <main className="min-h-screen pt-14 md:ml-96 md:pt-0">{children}</main>
+        <KeyboardShortcuts />
       </body>
     </html>
   );
