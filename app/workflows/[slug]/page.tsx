@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import { getWorkflowBySlug, getAllWorkflowSlugs, getWorkflows, getTools } from "@/lib/mdx";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 import { WorkflowClientContent } from "@/components/workflows/WorkflowClientContent";
+import { Verdict } from "@/components/mdx/Verdict";
+import { WorkflowStep } from "@/components/mdx/WorkflowStep";
+import { PromptBlock } from "@/components/mdx/PromptBlock";
+import { WorkflowGraph } from "@/components/mdx/WorkflowGraph";
+import { ToolLink } from "@/components/mdx/ToolLink";
 
 interface WorkflowPageProps {
   params: Promise<{
@@ -67,8 +73,18 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
   }
 
   const [allWorkflows, allTools] = await Promise.all([getWorkflows(), getTools()]);
-  const toolMetadata = new Map(allTools.map((tool) => [tool.frontmatter.slug, tool.frontmatter]));
-  const toolLinks = new Map(allTools.map((tool) => [tool.frontmatter.slug, tool.frontmatter.title]));
+  const toolMetadataMap = new Map(allTools.map((tool) => [tool.frontmatter.slug, tool.frontmatter]));
+  const toolLinksMap = new Map(allTools.map((tool) => [tool.frontmatter.slug, tool.frontmatter.title]));
+
+  const workflowTools = workflow.frontmatter.toolsUsed.map((toolSlug) => {
+    const metadata = toolMetadataMap.get(toolSlug);
+    return {
+      slug: toolSlug,
+      title: metadata?.title ?? toolSlug,
+      category: metadata?.category,
+      pricing: metadata?.pricing,
+    };
+  });
 
   const currentIndex = allWorkflows.findIndex((w) => w.frontmatter.slug === slug);
   const prevWorkflow =
@@ -80,13 +96,24 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
       ? { title: allWorkflows[currentIndex + 1].frontmatter.title, href: `/workflows/${allWorkflows[currentIndex + 1].frontmatter.slug}` }
       : undefined;
 
+  const mdxComponents = {
+    Verdict,
+    WorkflowStep,
+    PromptBlock,
+    WorkflowGraph,
+    ToolLink: ({ slug }: { slug: string }) => (
+      <ToolLink slug={slug} title={toolLinksMap.get(slug) || slug} />
+    ),
+  };
+
   return (
     <WorkflowClientContent
       workflow={workflow}
-      toolMetadata={toolMetadata}
-      toolLinks={toolLinks}
+      workflowTools={workflowTools}
       prevWorkflow={prevWorkflow}
       nextWorkflow={nextWorkflow}
-    />
+    >
+      <MDXRemote source={workflow.content} components={mdxComponents} />
+    </WorkflowClientContent>
   );
 }
