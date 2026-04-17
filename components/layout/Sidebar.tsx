@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navigation, type NavItem } from "@/lib/navigation";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -120,10 +121,11 @@ export function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-black p-4 dark:border-white">
+        <div className="border-t border-black p-4 dark:border-white flex items-center justify-between">
           <p className="text-xs text-gray-600 dark:text-gray-400">
             © {new Date().getFullYear()} ResBook
           </p>
+          <ThemeToggle />
         </div>
       </aside>
     </>
