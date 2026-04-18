@@ -138,3 +138,7 @@ Deploy to Vercel, Netlify, or any static host.
 ---
 
 **The AI Ops Manual — Curated tools, executable workflows, and your personal AI stack.**
+
+## Testing bot
+
+Added to verify manavarya-bot review flow.
