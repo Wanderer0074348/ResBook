@@ -60,6 +60,12 @@ export function WorkflowRunnerProvider({ slug, totalSteps, children }: WorkflowR
       getStorageKey(slug),
       JSON.stringify({ completedSteps: totalSteps, completionDate: date })
     );
+
+    const completed = JSON.parse(localStorage.getItem("resbook-workflow-completions") || "[]");
+    if (!completed.includes(slug)) {
+      completed.push(slug);
+      localStorage.setItem("resbook-workflow-completions", JSON.stringify(completed));
+    }
   };
 
   const resetProgress = () => {

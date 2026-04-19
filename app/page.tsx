@@ -3,6 +3,7 @@ import { getDotfiles, getTools, getWorkflows } from "@/lib/mdx";
 import { cn } from "@/lib/utils";
 import { AIChatAssistant } from "@/components/ai/AIChatAssistant";
 import { PersonalStackBuilder } from "@/components/stack/PersonalStackBuilder";
+import { CompletionStats } from "@/components/ui/CompletionStats";
 
 export default async function Home() {
   const [toolsData, workflowsData, dotfilesData] = await Promise.all([
@@ -53,6 +54,7 @@ export default async function Home() {
               <span>{toolCount} tools</span>
               <span>{workflowCount} workflows</span>
               <span>{dotfileCount} dotfiles</span>
+              <CompletionStats />
             </div>
 
             {/* Quick Navigation */}
