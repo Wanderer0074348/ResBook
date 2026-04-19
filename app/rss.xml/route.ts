@@ -1,8 +1,6 @@
 import { getTools, getWorkflows, getDotfiles } from "@/lib/mdx";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 
-export const runtime = "edge";
-
 async function getRSS() {
   const [tools, workflows, dotfiles] = await Promise.all([
     getTools(),
