@@ -13,6 +13,7 @@ import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
 import { ReadinessPanel } from "@/components/workflows/ReadinessPanel";
 import { WorkflowRunnerProvider, WorkflowProgressBar } from "@/components/workflows/WorkflowRunner";
 import { ShareButton } from "@/components/ui/ShareButton";
+import { UpdatedBadge } from "@/components/ui/UpdatedBadge";
 import type { WorkflowContent, ToolFrontmatter } from "@/lib/types";
 import { getWorkflowReadiness } from "@/lib/workflowReadiness";
 
@@ -152,6 +153,7 @@ export function WorkflowClientContent({
           </p>
 
           <div className="flex flex-wrap gap-3 items-center mb-4">
+            <UpdatedBadge dateAdded={workflow.frontmatter.dateAdded} />
             <span className="text-xs font-bold uppercase bg-gray-100 dark:bg-gray-900 px-3 py-1 border border-gray-300 dark:border-gray-700">
               {workflow.frontmatter.complexity}
             </span>

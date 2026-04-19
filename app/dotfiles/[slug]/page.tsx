@@ -12,6 +12,7 @@ import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
 import { AddToStackButton } from "@/components/stack/AddToStackButton";
 import { ShareButton } from "@/components/ui/ShareButton";
+import { UpdatedBadge } from "@/components/ui/UpdatedBadge";
 
 interface DotfilePageProps {
   params: Promise<{
@@ -124,6 +125,7 @@ export default async function DotfilePage({ params }: DotfilePageProps) {
           <div className="flex flex-wrap gap-3 items-center mb-4">
             <AddToStackButton item={{ type: "dotfile", slug, title: dotfile.frontmatter.title }} />
             <ShareButton title={dotfile.frontmatter.title} />
+            <UpdatedBadge dateAdded={dotfile.frontmatter.dateAdded} />
             <span className="text-xs font-bold uppercase bg-gray-100 dark:bg-gray-900 px-3 py-1 border border-gray-300 dark:border-gray-700">
               {dotfile.frontmatter.kind}
             </span>
