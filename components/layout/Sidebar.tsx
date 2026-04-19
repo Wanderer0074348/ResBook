@@ -76,6 +76,14 @@ export function Sidebar() {
 
   return (
     <>
+      {/* Skip to main content link for accessibility */}
+      <a
+        href="#main-content"
+        className="skip-link"
+      >
+        Skip to main content
+      </a>
+      
       <div className="fixed left-0 top-0 z-40 flex h-14 w-full items-center justify-between border-b border-black bg-white px-4 dark:border-white dark:bg-black md:hidden">
         <Link href="/" onClick={() => setMobileOpen(false)} className="text-base font-bold hover:opacity-75">
           resbook

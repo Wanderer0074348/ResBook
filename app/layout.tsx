@@ -52,7 +52,7 @@ export default function RootLayout({
     <html lang="en" className={`${jetBrainsMono.variable} h-full dark`}>
       <body className="min-h-full bg-white text-black font-mono antialiased dark:bg-black dark:text-white">
         <Sidebar />
-        <main className="min-h-screen pt-14 md:ml-96 md:pt-0">{children}</main>
+        <main id="main-content" className="min-h-screen pt-14 md:ml-96 md:pt-0">{children}</main>
         <KeyboardShortcuts />
       </body>
     </html>
