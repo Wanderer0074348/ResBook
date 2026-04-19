@@ -22,6 +22,7 @@ interface WorkflowClientContentProps {
   prevWorkflow?: { title: string; href: string };
   nextWorkflow?: { title: string; href: string };
   toolLinks: Map<string, string>;
+  relatedWorkflows?: { title: string; href: string }[];
 }
 
 export function WorkflowClientContent({
@@ -30,6 +31,7 @@ export function WorkflowClientContent({
   prevWorkflow,
   nextWorkflow,
   toolLinks,
+  relatedWorkflows = [],
 }: WorkflowClientContentProps) {
   const [isRunnerMode, setIsRunnerMode] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -252,6 +254,23 @@ export function WorkflowClientContent({
           )}
 
           <ReadinessPanel workflow={workflow.frontmatter} readiness={readiness} />
+
+          {relatedWorkflows.length > 0 && (
+            <div className="mt-8 border-t border-gray-300 pt-6 dark:border-gray-700">
+              <h3 className="text-lg font-bold mb-4">Related Workflows</h3>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {relatedWorkflows.map((related) => (
+                  <Link
+                    key={related.href}
+                    href={related.href}
+                    className="border border-gray-300 p-3 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
+                  >
+                    <span className="font-medium">{related.title}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Content */}
