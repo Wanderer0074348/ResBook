@@ -1,0 +1,45 @@
+version: 2
+registries:
+  npm:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: ${{ secrets.GITHUB_TOKEN }}
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: deps
+      include: scope
+    labels:
+      - dependencies
+      - automated
+    reviewers:
+      - manavarya09
+    versioning-strategy: increase
+    ignore:
+      - dependency-types: ["dev"]
+        update-types: ["minor", "patch"]
+      - package: "@types/*"
+      - package: "eslint*"
+      - package: "typescript"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+    labels:
+      - ci
+      - automated

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { DotfileFrontmatter, ToolFrontmatter, WorkflowFrontmatter } from "@/lib/types";
 import { getWorkflowReadiness } from "@/lib/workflowReadiness";
@@ -12,38 +12,75 @@ interface SearchClientProps {
   initialDotfiles: DotfileFrontmatter[];
 }
 
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export function SearchClient({ initialTools, initialWorkflows, initialDotfiles }: SearchClientProps) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const debouncedTerm = useDebounce(searchTerm, 300);
 
-  const filteredTools = initialTools.filter(
-    (tool) =>
-      tool.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tool.description.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    setIsSearching(searchTerm !== debouncedTerm);
+  }, [searchTerm, debouncedTerm]);
+
+  const filteredTools = useMemo(
+    () =>
+      initialTools.filter(
+        (tool) =>
+          tool.title.toLowerCase().includes(debouncedTerm.toLowerCase()) ||
+          tool.description.toLowerCase().includes(debouncedTerm.toLowerCase())
+      ),
+    [initialTools, debouncedTerm]
   );
 
-  const filteredWorkflows = initialWorkflows.filter(
-    (workflow) =>
-      workflow.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      workflow.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredWorkflows = useMemo(
+    () =>
+      initialWorkflows.filter(
+        (workflow) =>
+          workflow.title.toLowerCase().includes(debouncedTerm.toLowerCase()) ||
+          workflow.description.toLowerCase().includes(debouncedTerm.toLowerCase())
+      ),
+    [initialWorkflows, debouncedTerm]
   );
 
-  const filteredDotfiles = initialDotfiles.filter(
-    (dotfile) =>
-      dotfile.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dotfile.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDotfiles = useMemo(
+    () =>
+      initialDotfiles.filter(
+        (dotfile) =>
+          dotfile.title.toLowerCase().includes(debouncedTerm.toLowerCase()) ||
+          dotfile.description.toLowerCase().includes(debouncedTerm.toLowerCase())
+      ),
+    [initialDotfiles, debouncedTerm]
   );
 
   return (
     <>
       {/* Search Bar */}
       <section className="mb-12">
-        <input
-          type="text"
-          placeholder="search tools, workflows & dotfiles..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full border border-black bg-white p-3 font-mono text-sm placeholder-gray-500 focus:outline-none dark:border-white dark:bg-black"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="search tools, workflows & dotfiles..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full border border-black bg-white p-3 font-mono text-sm placeholder-gray-500 focus:outline-none dark:border-white dark:bg-black"
+            aria-label="Search tools, workflows, and dotfiles"
+          />
+          {isSearching && (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+              searching...
+            </span>
+          )}
+        </div>
       </section>
 
       {/* Tools Section */}

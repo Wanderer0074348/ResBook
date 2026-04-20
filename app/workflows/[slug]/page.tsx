@@ -96,15 +96,20 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
       ? { title: allWorkflows[currentIndex + 1].frontmatter.title, href: `/workflows/${allWorkflows[currentIndex + 1].frontmatter.slug}` }
       : undefined;
 
-  const mdxComponents = {
-    Verdict,
-    WorkflowStep,
-    PromptBlock,
-    WorkflowGraph,
-    ToolLink: ({ slug }: { slug: string }) => (
-      <ToolLink slug={slug} title={toolLinksMap.get(slug) || slug} />
-    ),
-  };
+  const currentTools = workflow.frontmatter.toolsUsed || [];
+  const relatedWorkflows = allWorkflows
+    .filter((w) => w.frontmatter.slug !== slug)
+    .map((w) => {
+      const wTools = w.frontmatter.toolsUsed || [];
+      const toolOverlap = wTools.filter((t) => currentTools.includes(t)).length;
+      const sameAuthor = w.frontmatter.author === workflow.frontmatter.author;
+      const score = toolOverlap * 2 + (sameAuthor ? 3 : 0);
+      return { ...w.frontmatter, score };
+    })
+    .filter((w) => w.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map((w) => ({ title: w.title, href: `/workflows/${w.slug}` }));
 
   return (
     <WorkflowClientContent
@@ -112,8 +117,7 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
       workflowTools={workflowTools}
       prevWorkflow={prevWorkflow}
       nextWorkflow={nextWorkflow}
-    >
-      <MDXRemote source={workflow.content} components={mdxComponents} />
-    </WorkflowClientContent>
+      relatedWorkflows={relatedWorkflows}
+    />
   );
 }

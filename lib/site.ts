@@ -10,6 +10,6 @@ export function getSiteUrl(path = ""): string {
 
 export const siteConfig = {
   name: "ResBook",
-  description: "A markdown-driven directory for AI tools, agentic workflows, dotfiles, and developer tips.",
+  description: "The AI Ops Manual — Curated tools with practical reviews and executable workflows.",
   defaultOgPath: "/opengraph-image",
 };

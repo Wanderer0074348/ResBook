@@ -1,0 +1,10 @@
+# Code Review Rules
+* @Manavarya09
+
+# Require at least one approval for changes to these directories
+/components/** @Manavarya09
+/lib/** @Manavarya09
+/app/** @Manavarya09
+
+# Require CI to pass
+required_reviews: 1

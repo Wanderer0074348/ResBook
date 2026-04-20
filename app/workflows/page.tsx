@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getWorkflows } from "@/lib/mdx";
 import { WorkflowsExplorer } from "@/components/listing/WorkflowsExplorer";
 import { extractWorkflowContentSummary } from "@/lib/workflowSummaries";
@@ -48,7 +49,9 @@ export default async function WorkflowsPage() {
         </div>
       ) : (
         <div className="px-8 py-12">
-          <WorkflowsExplorer workflows={workflows} />
+          <Suspense fallback={<p className="text-gray-500">Loading workflows...</p>}>
+            <WorkflowsExplorer workflows={workflows} />
+          </Suspense>
         </div>
       )}
     </div>

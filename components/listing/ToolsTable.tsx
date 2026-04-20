@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   createColumnHelper,
   flexRender,
@@ -22,9 +23,42 @@ interface ToolsTableProps {
 const columnHelper = createColumnHelper<ToolFrontmatter>();
 
 export function ToolsTable({ tools }: ToolsTableProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+
+  useEffect(() => {
+    const category = searchParams.get("category");
+    const pricing = searchParams.get("pricing");
+    const recommended = searchParams.get("recommended");
+    const sortBy = searchParams.get("sort");
+    const search = searchParams.get("search");
+
+    const newFilters: ColumnFiltersState = [];
+    if (category) newFilters.push({ id: "category", value: category });
+    if (pricing) newFilters.push({ id: "pricing", value: pricing });
+    if (recommended) newFilters.push({ id: "worthIt", value: recommended === "true" });
+    setColumnFilters(newFilters);
+
+    if (search) setGlobalFilter(search);
+    if (sortBy) setSorting([{ id: sortBy, desc: false }]);
+  }, [searchParams]);
+
+  const updateUrl = (newFilters: ColumnFiltersState, newSort: SortingState, newSearch: string) => {
+    const params = new URLSearchParams();
+    newFilters.forEach((filter) => {
+      if (filter.id === "category" && filter.value) params.set("category", filter.value as string);
+      if (filter.id === "pricing" && filter.value) params.set("pricing", filter.value as string);
+      if (filter.id === "worthIt" && filter.value !== undefined) params.set("recommended", String(filter.value));
+    });
+    if (newSearch) params.set("search", newSearch);
+    if (newSort[0]?.id) params.set("sort", newSort[0].id);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const columns = useMemo(
     () => [
@@ -117,7 +151,10 @@ export function ToolsTable({ tools }: ToolsTableProps) {
           <input
             type="text"
             value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
+            onChange={(e) => {
+              setGlobalFilter(e.target.value);
+              updateUrl(columnFilters, sorting, e.target.value);
+            }}
             placeholder="Search..."
             className="border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-700 dark:bg-black"
           />
@@ -125,9 +162,17 @@ export function ToolsTable({ tools }: ToolsTableProps) {
             value={
               (table.getColumn("category")?.getFilterValue() as string) || ""
             }
-            onChange={(e) =>
-              table.getColumn("category")?.setFilterValue(e.target.value || undefined)
-            }
+            onChange={(e) => {
+              const value = e.target.value || undefined;
+              table.getColumn("category")?.setFilterValue(value);
+              updateUrl(
+                columnFilters.filter((f) => f.id !== "category").concat(
+                  value ? { id: "category", value } : {} as ColumnFiltersState[0]
+                ),
+                sorting,
+                globalFilter
+              );
+            }}
             className="border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-700 dark:bg-black"
           >
             <option value="">Category</option>
@@ -142,9 +187,17 @@ export function ToolsTable({ tools }: ToolsTableProps) {
             value={
               (table.getColumn("pricing")?.getFilterValue() as string) || ""
             }
-            onChange={(e) =>
-              table.getColumn("pricing")?.setFilterValue(e.target.value || undefined)
-            }
+            onChange={(e) => {
+              const value = e.target.value || undefined;
+              table.getColumn("pricing")?.setFilterValue(value);
+              updateUrl(
+                columnFilters.filter((f) => f.id !== "pricing").concat(
+                  value ? { id: "pricing", value } : {} as ColumnFiltersState[0]
+                ),
+                sorting,
+                globalFilter
+              );
+            }}
             className="border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-700 dark:bg-black"
           >
             <option value="">Pricing</option>
@@ -161,11 +214,15 @@ export function ToolsTable({ tools }: ToolsTableProps) {
             }
             onChange={(e) => {
               const value = e.target.value;
-              if (value === "") {
-                table.getColumn("worthIt")?.setFilterValue(undefined);
-              } else {
-                table.getColumn("worthIt")?.setFilterValue(value === "true");
-              }
+              const boolValue = value === "" ? undefined : value === "true";
+              table.getColumn("worthIt")?.setFilterValue(boolValue);
+              updateUrl(
+                columnFilters.filter((f) => f.id !== "worthIt").concat(
+                  value ? { id: "worthIt", value: boolValue } : {} as ColumnFiltersState[0]
+                ),
+                sorting,
+                globalFilter
+              );
             }}
             className="border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-700 dark:bg-black"
           >
@@ -177,7 +234,9 @@ export function ToolsTable({ tools }: ToolsTableProps) {
           <select
             value={sorting[0]?.id || "title"}
             onChange={(e) => {
-              table.getColumn(e.target.value)?.toggleSorting(false);
+              const newSort = [{ id: e.target.value, desc: false }];
+              setSorting(newSort);
+              updateUrl(columnFilters, newSort, globalFilter);
             }}
             className="border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-700 dark:bg-black"
           >

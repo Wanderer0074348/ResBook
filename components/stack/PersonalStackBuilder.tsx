@@ -26,6 +26,20 @@ export function PersonalStackBuilder() {
         // ignore
       }
     }
+
+    const handleStackUpdate = () => {
+      const stored = localStorage.getItem("resbook-personal-stack");
+      if (stored) {
+        try {
+          setStack(JSON.parse(stored));
+        } catch {
+          // ignore
+        }
+      }
+    };
+
+    window.addEventListener("resbook:stack-updated", handleStackUpdate);
+    return () => window.removeEventListener("resbook:stack-updated", handleStackUpdate);
   }, []);
 
   const saveStack = (newStack: StackItem[]) => {

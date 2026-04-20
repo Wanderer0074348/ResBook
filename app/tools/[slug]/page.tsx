@@ -10,6 +10,9 @@ import { PromptBlock } from "@/components/mdx/PromptBlock";
 import { ToolLink } from "@/components/mdx/ToolLink";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
+import { AddToStackButton } from "@/components/stack/AddToStackButton";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { UpdatedBadge } from "@/components/ui/UpdatedBadge";
 
 interface ToolPageProps {
   params: Promise<{
@@ -117,6 +120,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
             {tool.frontmatter.description}
           </p>
           <div className="flex flex-wrap gap-3 items-center">
+            <AddToStackButton item={{ type: "tool", slug, title: tool.frontmatter.title }} />
+            <ShareButton title={tool.frontmatter.title} />
+            <UpdatedBadge dateAdded={tool.frontmatter.dateAdded} />
             <span className="text-xs font-bold uppercase bg-gray-100 dark:bg-gray-900 px-3 py-1 border border-gray-300 dark:border-gray-700">
               {tool.frontmatter.category}
             </span>

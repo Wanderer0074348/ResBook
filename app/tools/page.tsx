@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getTools } from "@/lib/mdx";
 import { ToolsExplorer } from "@/components/listing/ToolsExplorer";
 
@@ -37,7 +38,9 @@ export default async function ToolsPage() {
         </div>
       ) : (
         <div className="px-8 py-12">
-          <ToolsExplorer tools={tools} />
+          <Suspense fallback={<p className="text-gray-500">Loading tools...</p>}>
+            <ToolsExplorer tools={tools} />
+          </Suspense>
         </div>
       )}
     </div>

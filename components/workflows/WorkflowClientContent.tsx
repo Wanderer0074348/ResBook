@@ -7,7 +7,9 @@ import { PageNavigation } from "@/components/PageNavigation";
 import { ReadinessBadge } from "@/components/workflows/ReadinessBadge";
 import { ReadinessPanel } from "@/components/workflows/ReadinessPanel";
 import { WorkflowRunnerProvider, WorkflowProgressBar } from "@/components/workflows/WorkflowRunner";
-import type { WorkflowContent } from "@/lib/types";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { UpdatedBadge } from "@/components/ui/UpdatedBadge";
+import type { WorkflowContent, ToolFrontmatter } from "@/lib/types";
 import { getWorkflowReadiness } from "@/lib/workflowReadiness";
 
 interface WorkflowTool {
@@ -22,7 +24,8 @@ interface WorkflowClientContentProps {
   workflowTools: WorkflowTool[];
   prevWorkflow?: { title: string; href: string };
   nextWorkflow?: { title: string; href: string };
-  children: ReactNode;
+  toolLinks: Map<string, string>;
+  relatedWorkflows?: { title: string; href: string }[];
 }
 
 export function WorkflowClientContent({
@@ -30,7 +33,8 @@ export function WorkflowClientContent({
   workflowTools,
   prevWorkflow,
   nextWorkflow,
-  children,
+  toolLinks,
+  relatedWorkflows = [],
 }: WorkflowClientContentProps) {
   const [isRunnerMode, setIsRunnerMode] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -114,6 +118,7 @@ export function WorkflowClientContent({
               >
                 {addedToStack ? "✓ Added" : "+ Add to Stack"}
               </button>
+              <ShareButton title={workflow.frontmatter.title} />
             </div>
           </div>
 
@@ -122,6 +127,7 @@ export function WorkflowClientContent({
           </p>
 
           <div className="flex flex-wrap gap-3 items-center mb-4">
+            <UpdatedBadge dateAdded={workflow.frontmatter.dateAdded} />
             <span className="text-xs font-bold uppercase bg-gray-100 dark:bg-gray-900 px-3 py-1 border border-gray-300 dark:border-gray-700">
               {workflow.frontmatter.complexity}
             </span>
@@ -224,6 +230,23 @@ export function WorkflowClientContent({
           )}
 
           <ReadinessPanel workflow={workflow.frontmatter} readiness={readiness} />
+
+          {relatedWorkflows.length > 0 && (
+            <div className="mt-8 border-t border-gray-300 pt-6 dark:border-gray-700">
+              <h3 className="text-lg font-bold mb-4">Related Workflows</h3>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {relatedWorkflows.map((related) => (
+                  <Link
+                    key={related.href}
+                    href={related.href}
+                    className="border border-gray-300 p-3 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
+                  >
+                    <span className="font-medium">{related.title}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Content */}

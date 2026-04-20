@@ -18,7 +18,10 @@ const shortcuts: KeyboardShortcut[] = [
   { key: "d", description: "Go to dotfiles", action: () => {} },
   { key: "h", description: "Go to home", action: () => {} },
   { key: "c", description: "Go to collections", action: () => {} },
+  { key: "g then c", description: "Go to collections", action: () => {} },
+  { key: "g then h", description: "Go to home", action: () => {} },
   { key: "Escape", description: "Close dialog", action: () => {} },
+  { key: "j/k", description: "Navigate up/down", action: () => {} },
 ];
 
 export function KeyboardShortcuts() {
