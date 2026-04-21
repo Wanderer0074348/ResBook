@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { PageNavigation } from "@/components/PageNavigation";
@@ -9,7 +9,7 @@ import { ReadinessPanel } from "@/components/workflows/ReadinessPanel";
 import { WorkflowRunnerProvider, WorkflowProgressBar } from "@/components/workflows/WorkflowRunner";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { UpdatedBadge } from "@/components/ui/UpdatedBadge";
-import type { WorkflowContent, ToolFrontmatter } from "@/lib/types";
+import type { WorkflowContent } from "@/lib/types";
 import { getWorkflowReadiness } from "@/lib/workflowReadiness";
 
 interface WorkflowTool {
@@ -26,6 +26,7 @@ interface WorkflowClientContentProps {
   nextWorkflow?: { title: string; href: string };
   toolLinks: Map<string, string>;
   relatedWorkflows?: { title: string; href: string }[];
+  children?: React.ReactNode;
 }
 
 export function WorkflowClientContent({
@@ -33,8 +34,9 @@ export function WorkflowClientContent({
   workflowTools,
   prevWorkflow,
   nextWorkflow,
-  toolLinks,
+  toolLinks, // eslint-disable-line @typescript-eslint/no-unused-vars
   relatedWorkflows = [],
+  children,
 }: WorkflowClientContentProps) {
   const [isRunnerMode, setIsRunnerMode] = useState(false);
   const [isClient, setIsClient] = useState(false);

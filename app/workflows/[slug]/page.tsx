@@ -1,14 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { getWorkflowBySlug, getAllWorkflowSlugs, getWorkflows, getTools } from "@/lib/mdx";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 import { WorkflowClientContent } from "@/components/workflows/WorkflowClientContent";
-import { Verdict } from "@/components/mdx/Verdict";
-import { WorkflowStep } from "@/components/mdx/WorkflowStep";
-import { PromptBlock } from "@/components/mdx/PromptBlock";
-import { WorkflowGraph } from "@/components/mdx/WorkflowGraph";
-import { ToolLink } from "@/components/mdx/ToolLink";
 
 interface WorkflowPageProps {
   params: Promise<{
@@ -86,6 +80,8 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
     };
   });
 
+  const toolLinks = toolLinksMap;
+
   const currentIndex = allWorkflows.findIndex((w) => w.frontmatter.slug === slug);
   const prevWorkflow =
     currentIndex > 0
@@ -117,6 +113,7 @@ export default async function WorkflowPage({ params }: WorkflowPageProps) {
       workflowTools={workflowTools}
       prevWorkflow={prevWorkflow}
       nextWorkflow={nextWorkflow}
+      toolLinks={toolLinks}
       relatedWorkflows={relatedWorkflows}
     />
   );
